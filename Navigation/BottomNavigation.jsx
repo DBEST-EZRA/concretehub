@@ -1,13 +1,15 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, AntDesign, Entypo, Feather } from "@expo/vector-icons";
-import Home from "../Screens/Home";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  Entypo,
+  Feather,
+} from "@expo/vector-icons";
 import Calculator from "../Screens/Calculator";
 import Contact from "../Screens/Contact";
 import Help from "../Screens/Help";
-import Signup from "../Screens/Signup";
-import Login from "../Screens/Login";
-import PaymentDetails from "../Screens/PaymentDetails";
+import ProductsPage from "../Screens/ProductsPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +23,7 @@ const screenOptions = {
     right: 0,
     left: 0,
     elevation: 0,
-    height: 70,
+    height: 50,
   },
 };
 
@@ -29,8 +31,8 @@ const BottomNavigation = () => {
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="ProductsPage"
+        component={ProductsPage}
         options={{
           tabBarIcon: ({ focused }) => (
             <Ionicons
@@ -42,12 +44,12 @@ const BottomNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Login"
-        component={Login}
+        name="Calculator"
+        component={Calculator}
         options={{
           tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="calculator"
+            <MaterialCommunityIcons
+              name="calculator-variant"
               size={24}
               color={focused ? "#007bff" : "grey"}
             />
@@ -55,8 +57,8 @@ const BottomNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="PaymentDetails"
-        component={PaymentDetails}
+        name="Contact"
+        component={Contact}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
@@ -68,8 +70,8 @@ const BottomNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Signup"
-        component={Signup}
+        name="Help"
+        component={Help}
         options={{
           tabBarIcon: ({ focused }) => (
             <Entypo
@@ -85,15 +87,3 @@ const BottomNavigation = () => {
 };
 
 export default BottomNavigation;
-
-// name = "Help";
-// component = { Help };
-
-// name = "Calculator";
-// component = { Calculator };
-
-// name="Home"
-// component={Home}
-
-// name="Contact"
-// component={Contact}
