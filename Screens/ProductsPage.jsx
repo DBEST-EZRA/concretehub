@@ -161,6 +161,11 @@ const ProductsPage = ({ navigation }) => {
     },
   ]);
 
+
+  // const handleSearch =(userInput)=>{
+  //   return data.filter(item=>item.toLowerCase().includes(useState.toLowerCase()))
+  // }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate("ProductDetails", { item })}
@@ -189,7 +194,7 @@ const ProductsPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TopNavigation />
+      <TopNavigation data={data} setData={setData}/>
       <FlatList
         data={data}
         renderItem={renderItem}

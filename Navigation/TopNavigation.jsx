@@ -9,19 +9,23 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import Login from "../Screens/Login";
+import { SearchLogic } from "../logic/SearchLogic";
 
-const TopNavigation = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true);
+const TopNavigation = ({data,setData}) => {
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
     navigation.navigate("Login");
     console.log("I have navigated");
   };
+
+function handleSearch(text){
+  setData(SearchLogic(data,text))
+}
+
   return (
     <View style={styles.navContainer}>
-      <TextInput style={styles.input} placeholder="search " />
+      <TextInput style={styles.input} placeholder="search " onChangeText={handleSearch}/>
       <TouchableOpacity style={styles.icons} onPress={handleLoginPress}>
         <MaterialCommunityIcons name="account" size={24} color="black" />
         <Text>Account</Text>
