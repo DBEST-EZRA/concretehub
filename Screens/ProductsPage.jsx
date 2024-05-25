@@ -172,6 +172,7 @@ const ProductsPage = ({ navigation }) => {
     >
       <View style={styles.card}>
         <Image source={item.image} style={styles.image} />
+        
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.text}>sh {item.cost}</Text>
         <Text style={styles.remaining}>{item.remaining} items left</Text>
