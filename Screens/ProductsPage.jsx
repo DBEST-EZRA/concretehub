@@ -197,6 +197,7 @@ const ProductsPage = ({ navigation }) => {
     <View style={styles.container}>
       <TopNavigation data={data} setData={setData}/>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     borderRadius: 10,
-    margin: 10,
+    margin: 10
   },
   image: {
     width: "100%",
