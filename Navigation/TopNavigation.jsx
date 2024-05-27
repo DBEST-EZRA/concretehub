@@ -14,19 +14,21 @@ import { SearchLogic } from "../logic/SearchLogic";
 
 const TopNavigation = ({data,setData}) => {
   const navigation = useNavigation();
-
+ const[input,setInput] =useState()
   const handleLoginPress = () => {
     navigation.navigate("Login");
     console.log("I have navigated");
   };
 
 function handleSearch(text){
-  setData(SearchLogic(data,text))
+  setInput(text)
+  setData(SearchLogic(data,input))
 }
 
   return (
     <View style={styles.navContainer}>
-      <Searchbar placeholder="Search" onChangeText={()=>handleSearch(text)} />
+      <Searchbar style ={styles.input} placeholder="Search product ..." value={input}
+       onChangeText={handleSearch} />
       <TouchableOpacity style={styles.icons} onPress={handleLoginPress}>
         <MaterialCommunityIcons name="account" size={24} color="black" />
         <Text>Account</Text>
@@ -45,17 +47,19 @@ const styles = StyleSheet.create({
   navContainer: {
     top: 40,
     display: "flex",
+    width:'90vw',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
     marginBottom: 50,
   },
   input: {
-    height: 30,
     borderWidth: 1,
+    textAlign:'left',
     width: "60%",
     borderRadius: 20,
     paddingLeft: 20,
+    textAlign:'center'
   },
   button: {
     borderRadius: 20,
