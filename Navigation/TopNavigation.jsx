@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Searchbar } from "react-native-paper";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -25,7 +26,7 @@ function handleSearch(text){
 
   return (
     <View style={styles.navContainer}>
-      <TextInput style={styles.input} placeholder="search " onChangeText={handleSearch}/>
+      <Searchbar placeholder="Search" onChangeText={()=>handleSearch(text)} />
       <TouchableOpacity style={styles.icons} onPress={handleLoginPress}>
         <MaterialCommunityIcons name="account" size={24} color="black" />
         <Text>Account</Text>
