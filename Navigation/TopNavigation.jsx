@@ -17,7 +17,12 @@ const TopNavigation = () => {
 
   const handleLoginPress = () => {
     navigation.navigate("Login");
-    console.log("I have navigated");
+    console.log("Going to Login Page");
+  };
+
+  const showProductsInCart = () => {
+    navigation.navigate("Cart");
+    console.log("Showing products in Cart");
   };
   return (
     <View style={styles.navContainer}>
@@ -26,7 +31,7 @@ const TopNavigation = () => {
         <MaterialCommunityIcons name="account" size={24} color="black" />
         <Text>Account</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.icons}>
+      <TouchableOpacity style={styles.icons} onPress={showProductsInCart}>
         <Entypo name="shopping-cart" size={24} color="black" />
         <Text>Cart</Text>
       </TouchableOpacity>

@@ -1,16 +1,26 @@
 import React from "react";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import FlatButton from "../components/FlatButton";
+import { useNavigation } from "@react-navigation/native";
 
 const ProductDetails = ({ route }) => {
   const { item } = route.params;
 
+  const navigation = useNavigation();
+
+  const showProductsInCart = () => {
+    navigation.navigate("Cart");
+    console.log("Showing products in Cart");
+  };
+
   return (
     <View style={styles.productContainer}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Product Details</Text>
-        <TouchableOpacity style={styles.cartButton}>
+        {/* <Text style={styles.title}>Product Details</Text> */}
+        <TouchableOpacity
+          style={styles.cartButton}
+          onPress={showProductsInCart}
+        >
           <Entypo name="shopping-cart" size={24} color="black" />
           <Text>Cart</Text>
         </TouchableOpacity>
@@ -20,7 +30,7 @@ const ProductDetails = ({ route }) => {
         <Image style={styles.image} source={item.image} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>{item.name}</Text>
-          <Text style={styles.text}>sh {item.cost}</Text>
+          <Text style={styles.textTwo}>Ksh {item.cost}</Text>
         </View>
       </View>
 
@@ -32,7 +42,11 @@ const ProductDetails = ({ route }) => {
           Distinctio, perferendis?
         </Text>
 
-        <FlatButton text="Add To Cart" />
+        <TouchableOpacity>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Add To Cart</Text>
+          </View>
+        </TouchableOpacity>
 
         <Text style={styles.descriptionTitle}>Share This Product</Text>
         <View style={styles.icons}>
@@ -49,7 +63,8 @@ export default ProductDetails;
 
 const styles = StyleSheet.create({
   productContainer: {
-    paddingTop: 50,
+    backgroundColor: "white",
+    paddingTop: 30,
     paddingHorizontal: 20,
     flex: 1,
   },
@@ -77,12 +92,16 @@ const styles = StyleSheet.create({
     width: 150,
   },
   textContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
   },
   text: {
-    fontSize: 18,
-    color: "#000",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginVertical: 5,
+  },
+  textTwo: {
+    fontSize: 22,
     marginVertical: 5,
   },
   descriptionTitle: {
@@ -99,5 +118,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: 100,
+  },
+  button: {
+    borderRadius: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    backgroundColor: "#007bff",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

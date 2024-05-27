@@ -87,3 +87,6 @@ const BottomNavigation = () => {
 };
 
 export default BottomNavigation;
+
+// name = "Cart";
+// component = { Cart };

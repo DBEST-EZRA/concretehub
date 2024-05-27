@@ -54,12 +54,17 @@ const Login = () => {
         <Text>Forgot password</Text>
       </View>
       <View style={styles.loginFunctions}>
-        <TouchableOpacity style={styles.button}>
+        {/* <TouchableOpacity style={styles.button}>
           <Button
             // onPress={onPressLearnMore}
             title="Login"
             color="#007bff"
           />
+        </TouchableOpacity> */}
+        <TouchableOpacity>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </View>
         </TouchableOpacity>
         <Text style={styles.linkText}>
           Don't have an account?{" "}
@@ -105,7 +110,17 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: "10%",
-    marginVertical: 20,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "#007bff",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: 16,
+    textAlign: "center",
   },
   linkText: {
     marginLeft: "10%",

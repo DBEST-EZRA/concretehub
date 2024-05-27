@@ -73,13 +73,10 @@ const Signup = () => {
         />
       </View>
       <View>
-        <TouchableOpacity style={styles.button}>
-          <Button
-            onPress={() => {}}
-            title="Sign Up"
-            color="#007bff"
-            style={styles.buttonR}
-          />
+        <TouchableOpacity style={styles.buttonSpace}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Sign up</Text>
+          </View>
         </TouchableOpacity>
         <Text style={styles.linkText}>
           Already have an account?{" "}
@@ -136,9 +133,22 @@ const styles = StyleSheet.create({
     height: 22,
     width: 22,
   },
+  buttonSpace: {
+    marginVertical: 10,
+  },
   button: {
     marginHorizontal: "10%",
-    marginVertical: 20,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "#007bff",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: 16,
+    textAlign: "center",
   },
   buttonR: {
     paddingVertical: 30,
