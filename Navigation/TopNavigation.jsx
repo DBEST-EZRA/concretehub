@@ -45,6 +45,7 @@ export default TopNavigation;
 
 const styles = StyleSheet.create({
   navContainer: {
+    marginTop:0,
     top: 40,
     display: "flex",
     width:'90vw',

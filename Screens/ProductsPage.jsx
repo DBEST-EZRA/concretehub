@@ -12,16 +12,6 @@ import {
 } from "react-native";
 import TopNavigation from "../Navigation/TopNavigation";
 
-// const CardContainer = styled(Card)`
-// display: flex;
-// justify-content: flex-end;
-// backgroud-color:red;
-// `;
-
-const cardCover = styled(Card.Cover)`
-  display: flex;
-`;
-
 const ProductsPage = ({ navigation }) => {
   const [data, setData] = useState([
     {
