@@ -11,6 +11,7 @@ import {
   Dimensions,
 } from "react-native";
 import TopNavigation from "../Navigation/TopNavigation";
+import { CardComponent } from "../components/CardComponent";
 
 const ProductsPage = ({ navigation }) => {
   const [data, setData] = useState([
@@ -167,25 +168,27 @@ const ProductsPage = ({ navigation }) => {
   //   return data.filter(item=>item.toLowerCase().includes(useState.toLowerCase()))
   // }
 
+
   const renderItem = ({ item }) => (
-    <Card style={styles.card}>
-    <View style={styles.imageContainer}>
-      <Card.Cover style={styles.image} source={item.image} />
-    </View>
+    <CardComponent item ={item}/>
+  //   <Card style={styles.card}>
+  //   <View style={styles.imageContainer}>
+  //     <Card.Cover style={styles.image} source={item.image} />
+  //   </View>
 
-    <View style={styles.content}>
-      <Card.Title title={item.name} />
+  //   <View style={styles.content}>
+  //     <Card.Title title={item.name} />
 
-      <Card.Actions>
-        <Button onPress={() => navigation.navigate("ProductDetails", { item })}>
-          View details
-        </Button>
-        <Button onPress={() => navigation.navigate("ProductDetails", { item })}>
-          ADD TO CART
-        </Button>
-      </Card.Actions>
-    </View>
-  </Card>
+  //     <Card.Actions>
+  //       <Button onPress={() => navigation.navigate("ProductDetails", { item })}>
+  //         View details
+  //       </Button>
+  //       <Button onPress={() => navigation.navigate("ProductDetails", { item })}>
+  //         ADD TO CART
+  //       </Button>
+  //     </Card.Actions>
+  //   </View>
+  // </Card>
   );
 
   const [numColumns, setNumColumns] = useState(3);
