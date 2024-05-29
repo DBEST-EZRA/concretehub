@@ -1,22 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const ProductDetails = ({ route }) => {
   const { item } = route.params;
-
+  const [addedToCart, setAddedToCart] = useState(false);
   const navigation = useNavigation();
+  const [addedItems, setAddedItems] = useState([]);
 
   const showProductsInCart = () => {
     navigation.navigate("Cart");
     console.log("Showing products in Cart");
   };
 
+  const addToCart = () => {
+    navigation.navigate("Cart", { item });
+    setAddedItems([...addedItems, item]);
+    setAddedToCart(true);
+    console.log("Adding item to Cart:", item);
+    console.log(addedItems);
+  };
+
   return (
     <View style={styles.productContainer}>
       <View style={styles.titleContainer}>
-        {/* <Text style={styles.title}>Product Details</Text> */}
         <TouchableOpacity
           style={styles.cartButton}
           onPress={showProductsInCart}
@@ -37,14 +45,16 @@ const ProductDetails = ({ route }) => {
       <View>
         <Text style={styles.descriptionTitle}>Product Description</Text>
         <Text style={styles.description}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Distinctio,
-          perferendis? Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-          Distinctio, perferendis?
+          {item.description || "No description available."}
         </Text>
 
-        <TouchableOpacity>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Add To Cart</Text>
+        <TouchableOpacity onPress={addToCart} disabled={addedToCart}>
+          <View
+            style={[styles.button, addedToCart && styles.addedToCartButton]}
+          >
+            <Text style={styles.buttonText}>
+              {addedToCart ? "Added To Cart" : "Add To Cart"}
+            </Text>
           </View>
         </TouchableOpacity>
 
@@ -124,6 +134,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     backgroundColor: "#007bff",
+  },
+  addedToCartButton: {
+    backgroundColor: "green",
   },
   buttonText: {
     color: "white",

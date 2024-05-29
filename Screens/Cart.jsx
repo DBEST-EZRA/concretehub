@@ -8,23 +8,53 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-const productsData = [
-  { id: "1", name: "Product 1", price: 10.0, quantity: 1 },
-  { id: "2", name: "Product 2", price: 20.0, quantity: 1 },
-  { id: "3", name: "Product 3", price: 30.0, quantity: 1 },
-];
+// const productsData = [
+//   { id: "1", name: "Product 1", price: 10.0, quantity: 1 },
+//   { id: "2", name: "Product 2", price: 20.0, quantity: 1 },
+//   { id: "3", name: "Product 3", price: 30.0, quantity: 1 },
+// ];
 
 const Cart = () => {
-  const [products, setProducts] = useState(productsData);
+  const [products, setProducts] = useState([]);
   const [grandTotal, setGrandTotal] = useState(0);
 
   const navigation = useNavigation();
+  const route = useRoute();
 
   const showPaymentsPage = () => {
-    navigation.navigate("PaymentDetails");
+    const uniqueNumber = generateUniqueNumber();
+    navigation.navigate("PaymentDetails", { uniqueNumber });
     console.log("navigating to the payments page");
+    console.log(`Generated unique number: ${uniqueNumber}`);
+  };
+
+  useEffect(() => {
+    if (route.params?.item) {
+      addToCart(route.params.item);
+    }
+  }, [route.params?.item]);
+
+  const addToCart = (item) => {
+    setProducts((prevProducts) => {
+      const existingProductIndex = prevProducts.findIndex(
+        (product) => product.id === item.id
+      );
+
+      if (existingProductIndex !== -1) {
+        // If the item already exists, update its quantity
+        const updatedProducts = [...prevProducts];
+        updatedProducts[existingProductIndex] = {
+          ...updatedProducts[existingProductIndex],
+          quantity: updatedProducts[existingProductIndex].quantity + 1,
+        };
+        return updatedProducts;
+      } else {
+        // If the item does not exist, add it to the array
+        return [...prevProducts, { ...item, quantity: 1 }];
+      }
+    });
   };
 
   useEffect(() => {
@@ -32,36 +62,32 @@ const Cart = () => {
   }, [products]);
 
   const increaseQuantity = (id) => {
-    setProducts((prevProducts) => {
-      const newProducts = prevProducts.map((product) => {
-        if (product.id === id) {
-          return { ...product, quantity: product.quantity + 1 };
-        }
-        return product;
-      });
-      return newProducts;
-    });
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === id
+          ? { ...product, quantity: product.quantity + 1 }
+          : product
+      )
+    );
   };
 
   const decreaseQuantity = (id) => {
-    setProducts((prevProducts) => {
-      const newProducts = prevProducts.map((product) => {
-        if (product.id === id && product.quantity > 0) {
-          return { ...product, quantity: product.quantity - 1 };
-        }
-        return product;
-      });
-      return newProducts;
-    });
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === id && product.quantity > 1
+          ? { ...product, quantity: product.quantity - 1 }
+          : product
+      )
+    );
   };
 
   const calculateTotal = (product) => {
-    return (product.price * product.quantity).toFixed(2);
+    return (product.cost * product.quantity).toFixed(2);
   };
 
   const calculateGrandTotal = () => {
     const total = products.reduce(
-      (sum, product) => sum + product.price * product.quantity,
+      (sum, product) => sum + product.cost * product.quantity,
       0
     );
     console.log(`Calculated grand total: ${total.toFixed(2)}`); // Debug log
@@ -78,10 +104,14 @@ const Cart = () => {
     setProducts([]);
   };
 
+  const generateUniqueNumber = () => {
+    return Math.floor(Math.random() * 9000000000) + 1000000000;
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Text style={styles.itemText}>{item.name}</Text>
-      <Text style={styles.itemText}>{item.price.toFixed(2)}</Text>
+      <Text style={styles.itemText}>{item.cost.toFixed(2)}</Text>
       <View style={styles.quantityContainer}>
         <Button
           title="-"

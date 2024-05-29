@@ -18,6 +18,8 @@ const ProductsPage = ({ navigation }) => {
       name: "culverts",
       cost: 200,
       remaining: 4,
+      quantity: 31,
+      description: "sample of text description should be here dude",
     },
     {
       id: 2,
@@ -25,6 +27,8 @@ const ProductsPage = ({ navigation }) => {
       name: "pipes",
       cost: 150,
       remaining: 10,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 3,
@@ -32,6 +36,8 @@ const ProductsPage = ({ navigation }) => {
       name: "bricks",
       cost: 50,
       remaining: 25,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 4,
@@ -39,6 +45,8 @@ const ProductsPage = ({ navigation }) => {
       name: "cement",
       cost: 100,
       remaining: 50,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 5,
@@ -46,6 +54,7 @@ const ProductsPage = ({ navigation }) => {
       name: "gravel",
       cost: 75,
       remaining: 30,
+      description: "sample of text description should be here dude",
     },
     {
       id: 6,
@@ -53,6 +62,8 @@ const ProductsPage = ({ navigation }) => {
       name: "sand",
       cost: 40,
       remaining: 20,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 7,
@@ -60,6 +71,8 @@ const ProductsPage = ({ navigation }) => {
       name: "rebar",
       cost: 120,
       remaining: 15,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 8,
@@ -67,6 +80,8 @@ const ProductsPage = ({ navigation }) => {
       name: "concrete blocks",
       cost: 60,
       remaining: 22,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 9,
@@ -74,6 +89,8 @@ const ProductsPage = ({ navigation }) => {
       name: "roof tiles",
       cost: 80,
       remaining: 35,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 10,
@@ -81,6 +98,8 @@ const ProductsPage = ({ navigation }) => {
       name: "floor tiles",
       cost: 90,
       remaining: 12,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 11,
@@ -88,6 +107,8 @@ const ProductsPage = ({ navigation }) => {
       name: "steel beams",
       cost: 300,
       remaining: 8,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 12,
@@ -95,6 +116,8 @@ const ProductsPage = ({ navigation }) => {
       name: "wood planks",
       cost: 50,
       remaining: 50,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 13,
@@ -102,6 +125,8 @@ const ProductsPage = ({ navigation }) => {
       name: "asphalt",
       cost: 110,
       remaining: 18,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 14,
@@ -109,6 +134,8 @@ const ProductsPage = ({ navigation }) => {
       name: "tiles",
       cost: 70,
       remaining: 24,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 15,
@@ -116,6 +143,8 @@ const ProductsPage = ({ navigation }) => {
       name: "insulation",
       cost: 40,
       remaining: 36,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 16,
@@ -123,6 +152,8 @@ const ProductsPage = ({ navigation }) => {
       name: "drywall",
       cost: 25,
       remaining: 44,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 17,
@@ -130,6 +161,8 @@ const ProductsPage = ({ navigation }) => {
       name: "nails",
       cost: 10,
       remaining: 100,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 18,
@@ -137,6 +170,8 @@ const ProductsPage = ({ navigation }) => {
       name: "screws",
       cost: 8,
       remaining: 120,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 19,
@@ -144,6 +179,8 @@ const ProductsPage = ({ navigation }) => {
       name: "electrical wires",
       cost: 60,
       remaining: 60,
+      quantity: 20,
+      description: "sample of text description should be here dude",
     },
     {
       id: 20,
@@ -151,6 +188,8 @@ const ProductsPage = ({ navigation }) => {
       name: "plumbing pipes",
       cost: 90,
       remaining: 40,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
     {
       id: 21,
@@ -158,6 +197,8 @@ const ProductsPage = ({ navigation }) => {
       name: "paint",
       cost: 30,
       remaining: 55,
+      quantity: 1,
+      description: "sample of text description should be here dude",
     },
   ]);
 

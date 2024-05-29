@@ -9,8 +9,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
+import { useRoute } from "@react-navigation/native";
 
 const PaymentDetails = () => {
+  const route = useRoute();
+  const { uniqueNumber } = route.params;
+
   return (
     <SafeAreaView style={{ marginTop: 50 }}>
       <View style={styles.productsHeader}>
@@ -51,6 +55,12 @@ const PaymentDetails = () => {
           <Text style={{ fontSize: 16 }}>Shipping Fee</Text>
           <Text style={{ fontSize: 16 }}>Ksh 50</Text>
         </View>
+        <View style={styles.goodsAmount}>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            Order Number: {uniqueNumber}
+          </Text>
+        </View>
+        {/* Here it is */}
       </View>
       <View style={styles.placeOrder}>
         <Text style={{ fontSize: 16, fontWeight: "bold" }}>Ksh 250</Text>
