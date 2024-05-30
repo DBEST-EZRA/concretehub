@@ -15,13 +15,14 @@ export default FlatButton;
 
 const styles = StyleSheet.create({
   button: {
+    marginTop:20,
     borderRadius: 8,
     paddingVertical: 14,
     paddingHorizontal: 10,
     backgroundColor: "#f01d71",
   },
   buttonText: {
-    Color: "white",
+    color: "white",
     fontWeight: "bold",
     textTransform: "uppercase",
     fontSize: 16,
