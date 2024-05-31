@@ -9,6 +9,7 @@ const Help = () => {
   );
 };
 
+
 export default Help;
 
 const styles = StyleSheet.create({});
