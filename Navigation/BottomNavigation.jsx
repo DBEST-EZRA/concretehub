@@ -10,6 +10,7 @@ import Calculator from "../Screens/Calculator";
 import Contact from "../Screens/Contact";
 import Help from "../Screens/Help";
 import ProductsPage from "../Screens/ProductsPage";
+import AdminPage from "../Screens/Admin/AdminPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -71,7 +72,7 @@ const BottomNavigation = () => {
       />
       <Tab.Screen
         name="Help"
-        component={Help}
+        component={AdminPage}
         options={{
           tabBarIcon: ({ focused }) => (
             <Entypo
