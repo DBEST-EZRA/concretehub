@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    
   },
   splashContainer: {
     flex: 1,

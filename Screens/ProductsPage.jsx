@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Card, Button } from "react-native-paper";
 import {
   View,
   Image,
@@ -9,6 +11,7 @@ import {
   Dimensions,
 } from "react-native";
 import TopNavigation from "../Navigation/TopNavigation";
+import { CardComponent } from "../components/CardComponent";
 
 const ProductsPage = ({ navigation }) => {
   const [data, setData] = useState([
@@ -202,23 +205,18 @@ const ProductsPage = ({ navigation }) => {
     },
   ]);
 
+
+
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => navigation.navigate("ProductDetails", { item })}
-    >
-      <View style={styles.card}>
-        <Image source={item.image} style={styles.image} />
-        <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.text}>sh {item.cost}</Text>
-        <Text style={styles.remaining}>{item.remaining} items left</Text>
-      </View>
-    </TouchableOpacity>
+    <CardComponent item ={item}/>
   );
 
   const [numColumns, setNumColumns] = useState(3);
   const [itemWidth, setItemWidth] = useState(0);
 
   useEffect(() => {
+   
     const screenWidth = Dimensions.get("window").width;
     const widthWithoutMargin = 10;
     const marginBetweenItems = 10;
@@ -229,15 +227,13 @@ const ProductsPage = ({ navigation }) => {
   }, [numColumns]);
 
   return (
-    <View style={styles.container}>
-      <TopNavigation />
+    <View>
+      <TopNavigation data={data} setData={setData} />
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
-        numColumns={numColumns}
-        contentContainerStyle={styles.listContainer}
-        columnWrapperStyle={{ justifyContent: "space-around" }}
       />
     </View>
   );
@@ -246,36 +242,32 @@ const ProductsPage = ({ navigation }) => {
 export default ProductsPage;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#F5FCFF",
-    paddingBottom: 50,
-  },
-  listContainer: {
-    justifyContent: "space-between",
-  },
   card: {
-    backgroundColor: "#d9d9d9",
-    alignItems: "center",
-    padding: 10,
-    borderRadius: 10,
-    margin: 10,
+    flexDirection: 'row', // Align items horizontally
+    alignItems: 'center', // Vertically center items
+    margin: 8, // Add margin for space between cards
+    borderRadius: 8, // Border radius for the card
+    elevation: 5, // Add elevation for shadow effect
+    shadowColor: '#000', // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.25, // Shadow opacity
+    shadowRadius: 3.84, // Shadow radius
+    paddingTop:20,
+    backgroundColor:'red'
   },
-  image: {
-    width: "100%",
-    height: 100,
-    resizeMode: "contain",
+  imageContainer:{
+    margin:8,
+    width:200,
+    height:200
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+image: {
+
+    flex:1,
+    borderTopLeftRadius: 8, // Adjust border radius for the image
+    borderBottomLeftRadius: 8, // Adjust border radius for the image
   },
-  text: {
-    fontSize: 16,
-  },
-  remaining: {
-    fontSize: 16,
-    fontStyle: "italic",
+  content: {
+    flex: 1, 
+    padding: 8 // Add padding for content inside
   },
 });

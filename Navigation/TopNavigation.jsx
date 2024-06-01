@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Searchbar } from "react-native-paper";
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import Login from "../Screens/Login";
+import { SearchLogic } from "../logic/SearchLogic";
 
-const TopNavigation = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true);
+const TopNavigation = ({data,setData}) => {
   const navigation = useNavigation();
-
+ const[input,setInput] =useState()
   const handleLoginPress = () => {
     navigation.navigate("Login");
     console.log("Going to Login Page");
@@ -24,9 +24,16 @@ const TopNavigation = () => {
     navigation.navigate("Cart");
     console.log("Showing products in Cart");
   };
+
+function handleSearch(text){
+  setInput(text)
+  setData(SearchLogic(data,input))
+}
+
   return (
     <View style={styles.navContainer}>
-      <TextInput style={styles.input} placeholder="search " />
+      <Searchbar style ={styles.input} placeholder="Search product ..." value={input}
+       onChangeText={handleSearch} />
       <TouchableOpacity style={styles.icons} onPress={handleLoginPress}>
         <MaterialCommunityIcons name="account" size={24} color="black" />
         <Text>Account</Text>
@@ -43,19 +50,22 @@ export default TopNavigation;
 
 const styles = StyleSheet.create({
   navContainer: {
+    marginTop:0,
     top: 40,
     display: "flex",
+    width:'90vw',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
     marginBottom: 50,
   },
   input: {
-    height: 30,
     borderWidth: 1,
+    textAlign:'left',
     width: "60%",
     borderRadius: 20,
     paddingLeft: 20,
+    textAlign:'center'
   },
   button: {
     borderRadius: 20,
