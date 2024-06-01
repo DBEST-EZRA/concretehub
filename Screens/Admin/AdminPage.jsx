@@ -37,6 +37,12 @@ const AdminPage = () => {
         fat: 3.7,
       },
       {
+        key: 68,
+        name: "Gingerbread",
+        calories: 305,
+        fat: 3.7,
+      },
+      {
         key: 6,
         name: "Gingerbread",
         calories: 305,
