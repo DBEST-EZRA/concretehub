@@ -5,8 +5,9 @@ import { DataTable,Appbar } from 'react-native-paper';
 
 const Finance = () => {
   const [page, setPage] = useState(0);
-  const [numberOfItemsPerPageList] = useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = useState([2, 10]);
   const [itemsPerPage, onItemsPerPageChange] = useState(numberOfItemsPerPageList[0])
+  const [viewLess, viewAll]=useState()
   const [items] = useState([
     {
       key: 1,
@@ -65,6 +66,7 @@ const Finance = () => {
     setPage(0);
   }, [itemsPerPage]);
 
+ 
 
   return (
     <>
@@ -72,6 +74,12 @@ const Finance = () => {
           {/* <Appbar.BackAction/> */}
           <Appbar.Content title="Finance Page" />
         </Appbar.Header>
+        <View style={{marginTop:20}}>
+          <View>
+          <Text style={{textAlign:'center',fontSize:30,color:'blue'}}>sales details </Text>
+
+          </View>
+        
     <DataTable>
       <DataTable.Header>
       <DataTable.Title>product</DataTable.Title>
@@ -102,9 +110,11 @@ const Finance = () => {
         selectPageDropdownLabel={'Rows per page'}
       />
     </DataTable >
+        </View>
+   
     <ScrollView>
     <View style={{marginTop:40}}>
-    <Text >Driver details ...</Text>
+    <Text  style={{textAlign:'center',fontSize:30,color:'blue'}}>Driver details ...</Text>
     <DataTable >
       <DataTable.Header>
       <DataTable.Title>product</DataTable.Title>
@@ -138,7 +148,42 @@ const Finance = () => {
     </View>
 
     <View style={{marginTop:40}}>
-    <Text >suppliers details ...</Text>
+    <Text  style={{textAlign:'center',fontSize:30,color:'blue'}}>suppliers details ...</Text>
+    <DataTable >
+      <DataTable.Header>
+      <DataTable.Title>product name</DataTable.Title>
+       <DataTable.Title>product info</DataTable.Title>
+        <DataTable.Title numeric>delivery status</DataTable.Title>
+        <DataTable.Title numeric>payment status</DataTable.Title>
+        
+      </DataTable.Header>
+
+      {items.slice(from, to).map((item) => (
+        <DataTable.Row key={item.key}>
+          <DataTable.Cell>{item.name}</DataTable.Cell>
+          <DataTable.Cell>{item.name}</DataTable.Cell>
+          <DataTable.Cell numeric>{item.calories}</DataTable.Cell>
+          <DataTable.Cell numeric>{item.fat}</DataTable.Cell>
+        </DataTable.Row>
+      ))}
+
+      <DataTable.Pagination
+        page={page}
+        numberOfPages={Math.ceil(items.length / itemsPerPage)}
+        onPageChange={(page) => setPage(page)}
+        label={`${from + 1}-${to} of ${items.length}`}
+        // numberOfItemsPerPageList={numberOfItemsPerPageList}
+        numberOfItemsPerPage={itemsPerPage}
+        onItemsPerPageChange={onItemsPerPageChange}
+        showFastPaginationControls
+        selectPageDropdownLabel={'Rows per page'}
+      />
+    </DataTable>
+    </View>
+
+
+    <View style={{marginTop:40,marginBottom:70}}>
+    <Text  style={{textAlign:'center',fontSize:30,color:'blue'}} >more details ...</Text>
     <DataTable >
       <DataTable.Header>
       <DataTable.Title>product name</DataTable.Title>

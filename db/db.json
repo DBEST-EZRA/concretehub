@@ -1,16 +1,378 @@
 {
-    "posts": [
-      { "id": "1", "title": "a title", "views": 100 },
-      { "id": "2", "title": "another title", "views": 200 }
-    ],
-    "comments": [
-      { "id": "1", "text": "a comment about post 1", "postId": "1" },
-      { "id": "2", "text": "another comment about post 1", "postId": "1" }
-    ],
-        { "id": "1", "text": "a comment about post 1", "postId": "1" },
-      { "id": "2", "text": "another comment about post 1", "postId": "1" }
-    ],
-    "profile": {
-      "name": "typicode"
+  "data": [
+    {
+      "id": 8,
+      "sku": "313",
+      "name": "Concrete post",
+      "description": "A ready to use blended cement with additives formulated for setting wooden, concrete and metal fence posts into the ground.",
+      "url_key": "concrete-post",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/8/K3O8P16bqT2Ou7Cwp9E73cDbymrCWDXPhNWLfFQa.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": false,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$90.00",
+      "prices": {
+        "regular": {
+          "price": 90,
+          "formatted_price": "$90.00"
+        },
+        "final": {
+          "price": 90,
+          "formatted_price": "$90.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $90.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 4,
+      "sku": "567",
+      "name": "Paving slab",
+      "description": "Paving slabs are large paving stones which are the most common choice for patios and paths. These are a great way to create a clean look, and cover a bigger space more efficiently.",
+      "url_key": "paving-slab",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/4/GyyCDoqcktJs2RqJs2ARW2z6CcCyHA83b0q2VZmT.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": true,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$55.00",
+      "prices": {
+        "regular": {
+          "price": 55,
+          "formatted_price": "$55.00"
+        },
+        "final": {
+          "price": 55,
+          "formatted_price": "$55.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $55.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 6,
+      "sku": "012",
+      "name": "Wall copings",
+      "description": "wall coping is to provide protection from the elements. Doing so helps exterior walls maintain their structural integrity and appearance for years to come by effectively channelling rainwater away from the wall's material while protecting its internal fabric.",
+      "url_key": "wall-copings",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/6/onFcfjpP3QLDG4Ck5OWuf6njzyx5YUUug8CHbpKV.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": false,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$50.00",
+      "prices": {
+        "regular": {
+          "price": 50,
+          "formatted_price": "$50.00"
+        },
+        "final": {
+          "price": 50,
+          "formatted_price": "$50.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $50.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 10,
+      "sku": "240",
+      "name": "Concrete Vent",
+      "description": "Precast Concrete Louver Vent blocks provide not only beauty but practical protection while allowing light and air into the functional space. They are especially useful in cutting heavy winds without blocking all circulation of air for ventilation.",
+      "url_key": "concrete-vent",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/10/PwH3B3ul89Y3fqAXGcDaxPzV3joWMS0H0O0AR6Gq.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": true,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$40.00",
+      "prices": {
+        "regular": {
+          "price": 40,
+          "formatted_price": "$40.00"
+        },
+        "final": {
+          "price": 40,
+          "formatted_price": "$40.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $40.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 2,
+      "sku": "678",
+      "name": "Shallow Drain",
+      "description": "A narrow, shallow trench or channel that is lined with a permeable material, such as gravel or perforated pipe, to allow water to flow through it. Shallow drainage channels are commonly used in landscaping and construction projects to prevent water damage and erosion.",
+      "url_key": "shallow-drain",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/2/JYAshNgFYcpBZGgSGI2cfQme9OMZtvMr2fazvaqF.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": true,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$30.00",
+      "prices": {
+        "regular": {
+          "price": 30,
+          "formatted_price": "$30.00"
+        },
+        "final": {
+          "price": 30,
+          "formatted_price": "$30.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $30.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 7,
+      "sku": "214",
+      "name": "IDBs",
+      "description": "Inverted Block Drainage\r\nUsed for sewer systems and drainages.Inverted Block Drainage (IBD) are essential for channeling drainage and sewer systems.",
+      "url_key": "idbs",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/7/dEQen5uHzFh0LBXVypMrNSGHmVtssSRETmw3nLIY.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": false,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$30.00",
+      "prices": {
+        "regular": {
+          "price": 30,
+          "formatted_price": "$30.00"
+        },
+        "final": {
+          "price": 30,
+          "formatted_price": "$30.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $30.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 9,
+      "sku": "414",
+      "name": "Side drains",
+      "description": "Constructed along the side of contour paths in upland areas, or along sunken paths where water cannot easily be drained away from the path. They intercept surface and sub-surface flow and carry it away downhill.",
+      "url_key": "side-drains",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/9/BtqKOJoyWBAbwLMlZs0KSATeBAX3abbjzruk3DXq.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": true,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$30.00",
+      "prices": {
+        "regular": {
+          "price": 30,
+          "formatted_price": "$30.00"
+        },
+        "final": {
+          "price": 30,
+          "formatted_price": "$30.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $30.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 5,
+      "sku": "345",
+      "name": "Cabro",
+      "description": "used on road carriage way surfaces, car parks, within landscaped compounds and in tented shelters. The Strength of the block is determined by its thickness, with most common thicknesses ranging from 50mm, and 60mm.",
+      "url_key": "cabro",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/5/QoqKrYKxioE1V1hG5OEqbWBUD1qydRxhmYRsNPjt.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": false,
+      "on_sale": false,
+      "is_wishlist": false,
+      "min_price": "$10.00",
+      "prices": {
+        "regular": {
+          "price": 10,
+          "formatted_price": "$10.00"
+        },
+        "final": {
+          "price": 10,
+          "formatted_price": "$10.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-semibold\"\u003E\n        $10.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
+    },
+    {
+      "id": 1,
+      "sku": "901",
+      "name": "Culverts",
+      "description": "Typically embedded so as to be surrounded by soil, a culvert may be made from a pipe, reinforced concrete or other material.",
+      "url_key": "culverts",
+      "base_image": {
+        "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp",
+        "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp",
+        "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp",
+        "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp"
+      },
+      "images": [
+        {
+          "small_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/small/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp",
+          "medium_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/medium/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp",
+          "large_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/large/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp",
+          "original_image_url": "http://aa5a-102-210-40-234.ngrok-free.app/cache/original/product/1/T61sNuNqGwXCD7CPXj3aPm5lH9ArxuvDcfsqigwq.webp"
+        }
+      ],
+      "is_new": true,
+      "is_featured": true,
+      "on_sale": true,
+      "is_wishlist": false,
+      "min_price": "$9.00",
+      "prices": {
+        "regular": {
+          "price": 100,
+          "formatted_price": "$100.00"
+        },
+        "final": {
+          "price": 9,
+          "formatted_price": "$9.00"
+        }
+      },
+      "price_html": "\u003Cp class=\"font-medium text-[#6E6E6E] line-through\"\u003E\n        $100.00\n    \u003C/p\u003E\n\n    \u003Cp class=\"font-semibold\"\u003E\n        $9.00\n    \u003C/p\u003E\n",
+      "avg_ratings": 0
     }
+  ],
+  "links": {
+    "first": "http://aa5a-102-210-40-234.ngrok-free.app/api/products?page=1",
+    "last": "http://aa5a-102-210-40-234.ngrok-free.app/api/products?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "links": [
+      {
+        "url": null,
+        "label": "&laquo; Previous",
+        "active": false
+      },
+      {
+        "url": "http://aa5a-102-210-40-234.ngrok-free.app/api/products?page=1",
+        "label": "1",
+        "active": true
+      },
+      {
+        "url": null,
+        "label": "Next &raquo;",
+        "active": false
+      }
+    ],
+    "path": "http://aa5a-102-210-40-234.ngrok-free.app/api/products",
+    "per_page": 12,
+    "to": 9,
+    "total": 9
   }
+}
