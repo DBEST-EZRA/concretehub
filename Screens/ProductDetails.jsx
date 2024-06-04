@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { Entypo, AntDesign } from "@expo/vector-icons";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import {
+  StyleSheet,
+  Alert,
+  Share,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 
 const ProductDetails = ({ route }) => {
@@ -8,6 +17,26 @@ const ProductDetails = ({ route }) => {
   const [addedToCart, setAddedToCart] = useState(false);
   const navigation = useNavigation();
   const [addedItems, setAddedItems] = useState([]);
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Check out this product: ${item.name}\n\nPrice: Ksh ${
+          item.cost
+        }\n\nDescription: ${
+          item.description || "No description available."
+        }\n\nDownload the app Concrete Hub from the Google Play Store for more amazing products!`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
 
   const showProductsInCart = () => {
     navigation.navigate("Cart");
@@ -29,8 +58,10 @@ const ProductDetails = ({ route }) => {
           style={styles.cartButton}
           onPress={showProductsInCart}
         >
-          <Entypo name="shopping-cart" size={24} color="black" />
-          <Text>Cart</Text>
+          <Entypo name="shopping-cart" size={30} color="#007bff" />
+          <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "bold" }}>
+            Cart
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -58,11 +89,13 @@ const ProductDetails = ({ route }) => {
           </View>
         </TouchableOpacity>
 
-        <Text style={styles.descriptionTitle}>Share This Product</Text>
         <View style={styles.icons}>
-          <AntDesign name="facebook-square" size={24} color="black" />
-          <AntDesign name="google" size={24} color="black" />
-          <AntDesign name="instagram" size={24} color="black" />
+          <TouchableOpacity style={styles.fabShare} onPress={onShare}>
+            <Icon name="share-social" size={20} color="white" />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 16, marginLeft: 10 }}>
+            Share This Product
+          </Text>
         </View>
       </View>
     </View>
@@ -73,7 +106,7 @@ export default ProductDetails;
 
 const styles = StyleSheet.create({
   productContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#f8f8f8",
     paddingTop: 30,
     paddingHorizontal: 20,
     flex: 1,
@@ -94,17 +127,27 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
     marginBottom: 20,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   image: {
     height: 150,
     width: 150,
   },
+
   textContainer: {
-    // justifyContent: "center",
-    // alignItems: "center",
+    alignItems: "flex-start",
+    marginLeft: 20,
+    justifyContent: "center",
   },
+
   text: {
     fontSize: 22,
     fontWeight: "bold",
@@ -125,9 +168,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   icons: {
+    marginTop: 20,
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: 100,
+    alignItems: "center",
+    // justifyContent: "space-between",
+  },
+  fabShare: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#007bff",
+    borderRadius: 30,
+    elevation: 8,
   },
   button: {
     borderRadius: 8,

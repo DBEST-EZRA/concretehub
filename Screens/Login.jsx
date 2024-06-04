@@ -1,21 +1,49 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
-  Button,
   TextInput,
   TouchableOpacity,
   View,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import { useAuth } from "../Auth/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const navigation = useNavigation();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    const user = login(email, password);
+    if (user) {
+      switch (user.role) {
+        case "finance":
+          navigation.navigate("FinancePage");
+          break;
+        case "driver":
+          navigation.navigate("DriverPage");
+          break;
+        case "admin":
+          navigation.navigate("AdminPage");
+          break;
+        default:
+          navigation.navigate("Home");
+      }
+    } else {
+      Alert.alert(
+        "Invalid Credentials",
+        "Please check your email and password."
+      );
+    }
+  };
+
   const handleLinkPress = () => {
-    // Navigate to Signup Page
     navigation.navigate("Signup");
   };
 
@@ -23,20 +51,27 @@ const Login = () => {
     <SafeAreaView style={styles.loginContainer}>
       <View style={styles.loginHeader}>
         <Ionicons name="person-circle-sharp" size={168} color="#007bff" />
-        <Text>LOGIN</Text>
+        <Text style={styles.loginHeaderText}>LOGIN</Text>
       </View>
       <View style={styles.inputFields}>
         <View style={styles.inputContainer}>
-          <Text>Email Address</Text>
-          <TextInput style={styles.input} placeholder="Email" />
+          <Text style={styles.inputLabel}>Email Address</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+          />
           <Fontisto name="email" size={24} color="black" style={styles.icon} />
         </View>
         <View style={styles.inputContainer}>
-          <Text>Password</Text>
+          <Text style={styles.inputLabel}>Password</Text>
           <TextInput
             style={styles.input}
             placeholder="Password"
             secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
           />
           <Ionicons
             name="key-outline"
@@ -47,21 +82,13 @@ const Login = () => {
         </View>
       </View>
       <View style={styles.rememberMe}>
-        <Text style={{ alignItems: "center" }}>
-          {/* <CheckBox style={styles.checkbox} /> */}
-          Remember me
-        </Text>
-        <Text>Forgot password</Text>
+        <Text style={styles.rememberMeText}>Remember me</Text>
+        <TouchableOpacity>
+          <Text style={styles.forgotPasswordText}>Forgot password</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.loginFunctions}>
-        {/* <TouchableOpacity style={styles.button}>
-          <Button
-            // onPress={onPressLearnMore}
-            title="Login"
-            color="#007bff"
-          />
-        </TouchableOpacity> */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleLogin}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
           </View>
@@ -69,9 +96,7 @@ const Login = () => {
         <Text style={styles.linkText}>
           Don't have an account?{" "}
           <TouchableOpacity onPress={handleLinkPress}>
-            <Text style={{ color: "#007bff", textDecorationLine: "underline" }}>
-              Sign Up
-            </Text>
+            <Text style={styles.signUpLink}>Sign Up</Text>
           </TouchableOpacity>
         </Text>
       </View>
@@ -83,35 +108,66 @@ export default Login;
 
 const styles = StyleSheet.create({
   loginContainer: {
-    marginTop: 30,
+    // flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    backgroundColor: "#fff",
   },
   loginHeader: {
-    marginHorizontal: "10%",
-    marginVertical: 20,
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 20,
+  },
+  loginHeaderText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
   },
   inputFields: {
-    width: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: "10%",
+    width: "100%",
+    marginBottom: 20,
   },
   inputContainer: {
-    width: "100%",
-    marginVertical: 10,
+    marginBottom: 15,
+  },
+  inputLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: "#333",
   },
   input: {
     borderRadius: 5,
     height: 40,
     paddingLeft: 10,
-    width: "100%",
+    paddingRight: 40,
     backgroundColor: "#d9d9d9",
+    fontSize: 16,
+  },
+  icon: {
+    position: "absolute",
+    right: 10,
+    top: 35,
+  },
+  rememberMe: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  rememberMeText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  forgotPasswordText: {
+    fontSize: 16,
+    color: "#007bff",
+    textDecorationLine: "underline",
+  },
+  loginFunctions: {
+    alignItems: "center",
   },
   button: {
-    marginHorizontal: "10%",
     borderRadius: 8,
-    paddingVertical: 10,
+    paddingVertical: 14,
     paddingHorizontal: 10,
     backgroundColor: "#007bff",
   },
@@ -123,17 +179,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   linkText: {
-    marginLeft: "10%",
+    fontSize: 16,
+    color: "#333",
   },
-  rememberMe: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: "10%",
-    marginBottom: 20,
-  },
-  icon: {
-    position: "absolute",
-    right: 10,
-    top: 25,
+  signUpLink: {
+    color: "#007bff",
+    textDecorationLine: "underline",
   },
 });

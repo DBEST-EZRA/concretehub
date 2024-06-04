@@ -10,31 +10,28 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-// const productsData = [
-//   { id: "1", name: "Product 1", price: 10.0, quantity: 1 },
-//   { id: "2", name: "Product 2", price: 20.0, quantity: 1 },
-//   { id: "3", name: "Product 3", price: 30.0, quantity: 1 },
-// ];
-
 const Cart = () => {
-  const [products, setProducts] = useState([]);
-  const [grandTotal, setGrandTotal] = useState(0);
-
   const navigation = useNavigation();
-  const route = useRoute();
+  const routeParams = useRoute();
+  const [products, setProducts] = useState(
+    routeParams?.params?.item ? [routeParams.params.item] : []
+  );
+  const [grandTotal, setGrandTotal] = useState(0);
 
   const showPaymentsPage = () => {
     const uniqueNumber = generateUniqueNumber();
-    navigation.navigate("PaymentDetails", { uniqueNumber });
+    navigation.navigate("PaymentDetails", { uniqueNumber, grandTotal });
     console.log("navigating to the payments page");
-    console.log(`Generated unique number: ${uniqueNumber}`);
+    console.log(
+      `Generated unique number: ${uniqueNumber} and total ${grandTotal}`
+    );
   };
 
   useEffect(() => {
-    if (route.params?.item) {
-      addToCart(route.params.item);
+    if (routeParams.params?.item) {
+      addToCart(routeParams.params.item);
     }
-  }, [route.params?.item]);
+  }, [routeParams.params?.item]);
 
   const addToCart = (item) => {
     setProducts((prevProducts) => {
@@ -47,7 +44,7 @@ const Cart = () => {
         const updatedProducts = [...prevProducts];
         updatedProducts[existingProductIndex] = {
           ...updatedProducts[existingProductIndex],
-          quantity: updatedProducts[existingProductIndex].quantity + 1,
+          quantity: updatedProducts[existingProductIndex].quantity,
         };
         return updatedProducts;
       } else {

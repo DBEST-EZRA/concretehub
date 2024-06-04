@@ -1,187 +1,125 @@
 import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import { View, Text, Button, FlatList, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
-
-const products = [
-  {
-    id: "1",
-    name: "Product 1",
-    description: "Description of Product 1",
-    price: 10,
-  },
-  {
-    id: "2",
-    name: "Product 2",
-    description: "Description of Product 2",
-    price: 20,
-  },
-];
-
-const ProductsScreen = ({ navigation }) => {
-  return (
-    <View>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("ProductDetail", { product: item })
-            }
-          >
-            <Text>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-};
-
-const ProductDetailScreen = ({ route, navigation }) => {
-  const { product } = route.params;
-  return (
-    <View>
-      <Text>{product.name}</Text>
-      <Text>{product.description}</Text>
-      <Text>Price: ${product.price}</Text>
-      <Button
-        title="Add to Cart"
-        onPress={() => {
-          // add to cart
-        }}
-      />
-    </View>
-  );
-};
-
-const CartScreen = ({ cart }) => {
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-  return (
-    <View>
-      {cart.map((item) => (
-        <Text key={item.id}>
-          {item.name} - ${item.price}
-        </Text>
-      ))}
-      <Text>Total: ${total}</Text>
-    </View>
-  );
-};
-
-const AuthScreen = ({ isLoggedIn, setIsLoggedIn }) => {
-  return (
-    <View>
-      {isLoggedIn ? (
-        <Text>Welcome Back!</Text>
-      ) : (
-        <>
-          <Button title="Login" onPress={() => setIsLoggedIn(true)} />
-          <Button
-            title="Signup"
-            onPress={() => {
-              // signup
-            }}
-          />
-        </>
-      )}
-    </View>
-  );
-};
-
-const ProductsStack = () => {
-  const [cart, setCart] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Products"
-        component={ProductsScreen}
-        options={{
-          headerRight: () => (
-            <>
-              <Ionicons
-                name="cart"
-                size={25}
-                onPress={() => navigation.navigate("Cart", { cart })}
-              />
-              <Ionicons
-                name={isLoggedIn ? "person" : "person-outline"}
-                size={25}
-                onPress={() =>
-                  navigation.navigate("Auth", { isLoggedIn, setIsLoggedIn })
-                }
-              />
-            </>
-          ),
-        }}
-      />
-      <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
-      <Stack.Screen name="Cart">
-        {(props) => <CartScreen {...props} cart={cart} />}
-      </Stack.Screen>
-      <Stack.Screen name="Auth">
-        {(props) => (
-          <AuthScreen
-            {...props}
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-          />
-        )}
-      </Stack.Screen>
-    </Stack.Navigator>
-  );
-};
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [animation] = useState(new Animated.Value(0));
+
+  const toggleMenu = () => {
+    if (isOpen) {
+      Animated.timing(animation, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+    setIsOpen(!isOpen);
+  };
+
+  const button1Style = {
+    transform: [
+      {
+        scale: animation,
+      },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -70],
+        }),
+      },
+    ],
+    opacity: animation,
+  };
+
+  const button2Style = {
+    transform: [
+      {
+        scale: animation,
+      },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -140],
+        }),
+      },
+    ],
+    opacity: animation,
+  };
+
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="ProductsStack"
-          component={ProductsStack}
-          options={{ tabBarLabel: "Products" }}
-        />
-        <Tab.Screen
-          name="Page2"
-          component={Page2Screen}
-          options={{ tabBarLabel: "Page 2" }}
-        />
-        <Tab.Screen
-          name="Page3"
-          component={Page3Screen}
-          options={{ tabBarLabel: "Page 3" }}
-        />
-        <Tab.Screen
-          name="Page4"
-          component={Page4Screen}
-          options={{ tabBarLabel: "Page 4" }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      {/* Other contents of the page */}
+      <Text style={styles.text}>This is some text on the page.</Text>
+      <Text style={styles.text}>Here is some more content.</Text>
+
+      {/* Floating Action Button */}
+      <View style={styles.fabContainer}>
+        <Animated.View style={[styles.secondaryButton, button1Style]}>
+          <TouchableOpacity
+            style={styles.fab}
+            onPress={() => alert("Button 1 clicked!")}
+          >
+            <Icon name="create" size={20} color="white" />
+          </TouchableOpacity>
+        </Animated.View>
+        <Animated.View style={[styles.secondaryButton, button2Style]}>
+          <TouchableOpacity
+            style={styles.fab}
+            onPress={() => alert("Button 2 clicked!")}
+          >
+            <Icon name="camera" size={20} color="white" />
+          </TouchableOpacity>
+        </Animated.View>
+        <TouchableOpacity style={styles.fab} onPress={toggleMenu}>
+          <Icon name={isOpen ? "close" : "add"} size={30} color="white" />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
-const Page2Screen = () => (
-  <View>
-    <Text>Page 2</Text>
-  </View>
-);
-const Page3Screen = () => (
-  <View>
-    <Text>Page 3</Text>
-  </View>
-);
-const Page4Screen = () => (
-  <View>
-    <Text>Page 4</Text>
-  </View>
-);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  text: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  fabContainer: {
+    position: "absolute",
+    right: 30,
+    bottom: 30,
+    alignItems: "center",
+  },
+  fab: {
+    width: 60,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#03A9F4",
+    borderRadius: 30,
+    elevation: 8,
+  },
+  secondaryButton: {
+    position: "absolute",
+  },
+});
 
 export default App;
