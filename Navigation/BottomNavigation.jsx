@@ -11,6 +11,7 @@ import Contact from "../Screens/Contact";
 import Help from "../Screens/Help";
 import ProductsPage from "../Screens/ProductsPage";
 import AdminPage from "../Screens/Admin/AdminPage";
+import Finance from "../Screens/Admin/Finance";
 
 const Tab = createBottomTabNavigator();
 
@@ -72,7 +73,7 @@ const BottomNavigation = () => {
       />
       <Tab.Screen
         name="Help"
-        component={AdminPage}
+        component={Finance}
         options={{
           tabBarIcon: ({ focused }) => (
             <Entypo
