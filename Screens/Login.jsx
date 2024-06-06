@@ -10,41 +10,50 @@ import {
 } from "react-native";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../Auth/AuthContext";
+import { auth, signInWithEmailAndPassword } from "../Database/Config"; // Ensure correct path
 
 const Login = () => {
-  const { login } = useAuth();
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  const toggleSecureTextEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
 
   const handleLogin = () => {
-    const user = login(email, password);
-    if (user) {
-      switch (user.role) {
-        case "finance":
-          navigation.navigate("FinancePage");
-          break;
-        case "driver":
-          navigation.navigate("DriverPage");
-          break;
-        case "admin":
-          navigation.navigate("AdminPage");
-          break;
-        default:
-          navigation.navigate("Home");
-      }
+    if (email && password) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          Alert.alert("Success", "Logged in successfully");
+          navigateToCorrectPage(email); // Navigate based on user's email
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(`Error ${errorCode}: ${errorMessage}`);
+          Alert.alert("Invalid Credentials", errorMessage);
+        });
     } else {
-      Alert.alert(
-        "Invalid Credentials",
-        "Please check your email and password."
-      );
+      Alert.alert("Error", "Please fill all the fields");
     }
   };
 
   const handleLinkPress = () => {
     navigation.navigate("Signup");
+  };
+
+  const navigateToCorrectPage = (email) => {
+    if (email === "onewaycompagency@gmail.com") {
+      navigation.navigate("AdminPage");
+    } else if (email === "finance@mail.com") {
+      navigation.navigate("FinancePage");
+    } else {
+      navigation.navigate("Home");
+    }
   };
 
   return (
@@ -66,19 +75,23 @@ const Login = () => {
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-          />
-          <Ionicons
-            name="key-outline"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
+          <View style={styles.passwordInput}>
+            <TextInput
+              style={styles.passwordTextInput}
+              placeholder="Password"
+              secureTextEntry={secureTextEntry}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity onPress={toggleSecureTextEntry}>
+              <Ionicons
+                name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
+                size={24}
+                color="black"
+                style={styles.eyeIcon}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <View style={styles.rememberMe}>
@@ -108,10 +121,9 @@ export default Login;
 
 const styles = StyleSheet.create({
   loginContainer: {
-    // flex: 1,
     justifyContent: "center",
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f8f8",
   },
   loginHeader: {
     alignItems: "center",
@@ -146,6 +158,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 10,
     top: 35,
+  },
+  passwordInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+  },
+  passwordTextInput: {
+    borderRadius: 5,
+    height: 40,
+    paddingLeft: 10,
+    paddingRight: 40,
+    backgroundColor: "#d9d9d9",
+    fontSize: 16,
+    flex: 1,
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    top: -10,
   },
   rememberMe: {
     flexDirection: "row",

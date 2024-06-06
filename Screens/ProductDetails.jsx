@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Entypo } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -11,12 +11,23 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { db, auth } from "../Database/Config"; // Import Firestore and auth instance
+import { addDoc, collection } from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
 
 const ProductDetails = ({ route }) => {
   const { item } = route.params;
   const [addedToCart, setAddedToCart] = useState(false);
   const navigation = useNavigation();
-  const [addedItems, setAddedItems] = useState([]);
+
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    // Fetch user's email from auth
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserEmail(currentUser.email);
+    }
+  }, []);
 
   const onShare = async () => {
     try {
@@ -38,17 +49,31 @@ const ProductDetails = ({ route }) => {
     }
   };
 
-  const showProductsInCart = () => {
-    navigation.navigate("Cart");
-    console.log("Showing products in Cart");
-  };
+  const addToCart = async () => {
+    if (!userEmail) {
+      // If user is not logged in, display an alert
+      Alert.alert(
+        "Login Required",
+        "You need to login first to add items to the cart."
+      );
+      return;
+    }
 
-  const addToCart = () => {
-    navigation.navigate("Cart", { item });
-    setAddedItems([...addedItems, item]);
-    setAddedToCart(true);
-    console.log("Adding item to Cart:", item);
-    console.log(addedItems);
+    try {
+      // Add item to cart collection in Firestore
+      const cartRef = collection(db, "cart");
+      await addDoc(cartRef, {
+        name: item.name,
+        cost: item.cost,
+        quantity: 1, // Default quantity is 1, you can change it as per your requirement
+        userEmail: userEmail, // Add user's email to the cart item
+      });
+
+      setAddedToCart(true);
+      console.log("Adding item to Cart:", item);
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
   };
 
   return (
@@ -56,7 +81,7 @@ const ProductDetails = ({ route }) => {
       <View style={styles.titleContainer}>
         <TouchableOpacity
           style={styles.cartButton}
-          onPress={showProductsInCart}
+          onPress={() => navigation.navigate("Cart")}
         >
           <Entypo name="shopping-cart" size={30} color="#007bff" />
           <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "bold" }}>

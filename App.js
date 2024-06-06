@@ -40,35 +40,9 @@ function HomeStack() {
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="PaymentDetails" component={PaymentDetails} />
-      <Stack.Screen
-        name="FinancePage"
-        options={{ headerShown: false }}
-        children={(props) => (
-          <ProtectedRoute
-            {...props}
-            component={FinancePage}
-            roles={["finance"]}
-          />
-        )}
-      />
-      <Stack.Screen
-        name="DriverPage"
-        options={{ headerShown: false }}
-        children={(props) => (
-          <ProtectedRoute
-            {...props}
-            component={DriverPage}
-            roles={["driver"]}
-          />
-        )}
-      />
-      <Stack.Screen
-        name="AdminPage"
-        options={{ headerShown: false }}
-        children={(props) => (
-          <ProtectedRoute {...props} component={AdminPage} roles={["admin"]} />
-        )}
-      />
+      <Stack.Screen name="AdminPage" component={AdminPage} />
+      <Stack.Screen name="DriverPage" component={DriverPage} />
+      <Stack.Screen name="FinancePage" component={FinancePage} />
     </Stack.Navigator>
   );
 }

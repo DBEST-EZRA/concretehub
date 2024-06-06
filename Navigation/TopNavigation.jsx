@@ -1,29 +1,51 @@
+import React, { useState, useEffect } from "react";
 import {
-  Text,
   View,
+  Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { auth } from "../Database/Config"; // Import auth instance from your Firebase config
 
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import Login from "../Screens/Login";
 
 const TopNavigation = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true);
   const navigation = useNavigation();
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    // Fetch user's email from auth
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserEmail(currentUser.email);
+    }
+  }, []);
 
   const handleLoginPress = () => {
     navigation.navigate("Login");
     console.log("Going to Login Page");
   };
 
+  const handleLogout = () => {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("User signed out successfully");
+        // Navigate to the login screen or any other screen you want after logout
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        console.error("Error signing out: ", error);
+      });
+  };
+
   const showProductsInCart = () => {
     navigation.navigate("Cart");
     console.log("Showing products in Cart");
   };
+
   return (
     <View style={styles.navContainer}>
       <TextInput style={styles.input} placeholder="search " />
@@ -35,6 +57,12 @@ const TopNavigation = () => {
         <Entypo name="shopping-cart" size={24} color="black" />
         <Text>Cart</Text>
       </TouchableOpacity>
+      {/* {userEmail && (
+        <TouchableOpacity style={styles.icons} onPress={handleLogout}>
+          <MaterialCommunityIcons name="logout" size={24} color="black" />
+          <Text>Logout</Text>
+        </TouchableOpacity>
+      )} */}
     </View>
   );
 };

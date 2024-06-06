@@ -6,6 +6,7 @@ import {
   Animated,
   Linking,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -118,72 +119,74 @@ const Contact = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={{ fontSize: 30, fontWeight: "bold", marginTop: 20 }}>
-        Need To Get In Touch With Us?
-      </Text>
-      <View style={styles.innerContainer}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
-        <Text style={{ fontSize: 16 }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo incidunt
-          corporis voluptate aliquid consequuntur! Quidem voluptas nostrum
-          laudantium laborum quaerat, laboriosam alias veniam molestiae ea rerum
-          doloremque culpa consequatur maxime optio iusto libero ullam nesciunt
-          magnam perspiciatis?
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <Text style={{ fontSize: 30, fontWeight: "bold", marginTop: 20 }}>
+          Need To Get In Touch With Us?
         </Text>
-      </View>
-      <View style={styles.innerContainer}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
-        <Text style={{ fontSize: 16 }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo incidunt
-          corporis voluptate aliquid consequuntur! Quidem voluptas nostrum
-          laudantium laborum quaerat, laboriosam alias veniam molestiae ea rerum
-          doloremque culpa consequatur maxime optio iusto libero ullam nesciunt
-          magnam perspiciatis?
-        </Text>
-      </View>
-      <View style={styles.innerContainer}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
-        <Text style={{ fontSize: 16 }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo incidunt
-          corporis voluptate aliquid consequuntur! Quidem voluptas nostrum
-          laudantium laborum quaerat, laboriosam alias veniam molestiae ea rerum
-          doloremque culpa consequatur maxime optio iusto libero ullam nesciunt
-          magnam perspiciatis?
-        </Text>
-      </View>
-      <View style={styles.innerContainer}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
-        <Text style={{ fontSize: 16 }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo incidunt
-          corporis voluptate aliquid consequuntur! Quidem voluptas nostrum
-          laudantium laborum quaerat, laboriosam alias veniam molestiae ea rerum
-          doloremque culpa consequatur maxime optio iusto libero ullam nesciunt
-          magnam perspiciatis?
-        </Text>
-      </View>
+        <View style={styles.innerContainer}>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
+          <Text style={{ fontSize: 16 }}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
+            nostrum laudantium laborum quaerat, laboriosam alias veniam
+            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
+            libero ullam nesciunt magnam perspiciatis?
+          </Text>
+        </View>
+        <View style={styles.innerContainer}>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
+          <Text style={{ fontSize: 16 }}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
+            nostrum laudantium laborum quaerat, laboriosam alias veniam
+            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
+            libero ullam nesciunt magnam perspiciatis?
+          </Text>
+        </View>
+        <View style={styles.innerContainer}>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
+          <Text style={{ fontSize: 16 }}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
+            nostrum laudantium laborum quaerat, laboriosam alias veniam
+            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
+            libero ullam nesciunt magnam perspiciatis?
+          </Text>
+        </View>
+        <View style={styles.innerContainer}>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
+          <Text style={{ fontSize: 16 }}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
+            nostrum laudantium laborum quaerat, laboriosam alias veniam
+            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
+            libero ullam nesciunt magnam perspiciatis?
+          </Text>
+        </View>
 
-      <View style={styles.fabContainer}>
-        <Animated.View style={[styles.secondaryButton, button1Style]}>
-          <TouchableOpacity style={styles.fabEmail} onPress={sendEmail}>
-            <Icon name="create" size={20} color="white" />
+        <View style={styles.fabContainer}>
+          <Animated.View style={[styles.secondaryButton, button1Style]}>
+            <TouchableOpacity style={styles.fabEmail} onPress={sendEmail}>
+              <Icon name="create" size={20} color="white" />
+            </TouchableOpacity>
+          </Animated.View>
+          <Animated.View style={[styles.secondaryButton, button2Style]}>
+            <TouchableOpacity style={styles.fabPhone} onPress={makePhoneCall}>
+              <Icon name="call" size={20} color="white" />
+            </TouchableOpacity>
+          </Animated.View>
+          <Animated.View style={[styles.secondaryButton, button3Style]}>
+            <TouchableOpacity style={styles.fabWhatsapp} onPress={openWhatsApp}>
+              <Icon name="logo-whatsapp" size={20} color="white" />
+            </TouchableOpacity>
+          </Animated.View>
+          <TouchableOpacity style={styles.fab} onPress={toggleMenu}>
+            <Icon name={isOpen ? "close" : "add"} size={30} color="white" />
           </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.secondaryButton, button2Style]}>
-          <TouchableOpacity style={styles.fabPhone} onPress={makePhoneCall}>
-            <Icon name="call" size={20} color="white" />
-          </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.secondaryButton, button3Style]}>
-          <TouchableOpacity style={styles.fabWhatsapp} onPress={openWhatsApp}>
-            <Icon name="logo-whatsapp" size={20} color="white" />
-          </TouchableOpacity>
-        </Animated.View>
-        <TouchableOpacity style={styles.fab} onPress={toggleMenu}>
-          <Icon name={isOpen ? "close" : "add"} size={30} color="white" />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 

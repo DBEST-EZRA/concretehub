@@ -9,73 +9,66 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { db, auth } from "../Database/Config"; // Import Firestore and auth instance
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
 
 const Cart = () => {
   const navigation = useNavigation();
   const routeParams = useRoute();
-  const [products, setProducts] = useState(
-    routeParams?.params?.item ? [routeParams.params.item] : []
-  );
+  const [products, setProducts] = useState([]);
   const [grandTotal, setGrandTotal] = useState(0);
 
-  const showPaymentsPage = () => {
-    const uniqueNumber = generateUniqueNumber();
-    navigation.navigate("PaymentDetails", { uniqueNumber, grandTotal });
-    console.log("navigating to the payments page");
-    console.log(
-      `Generated unique number: ${uniqueNumber} and total ${grandTotal}`
-    );
-  };
-
   useEffect(() => {
-    if (routeParams.params?.item) {
-      addToCart(routeParams.params.item);
-    }
-  }, [routeParams.params?.item]);
-
-  const addToCart = (item) => {
-    setProducts((prevProducts) => {
-      const existingProductIndex = prevProducts.findIndex(
-        (product) => product.id === item.id
-      );
-
-      if (existingProductIndex !== -1) {
-        // If the item already exists, update its quantity
-        const updatedProducts = [...prevProducts];
-        updatedProducts[existingProductIndex] = {
-          ...updatedProducts[existingProductIndex],
-          quantity: updatedProducts[existingProductIndex].quantity,
-        };
-        return updatedProducts;
-      } else {
-        // If the item does not exist, add it to the array
-        return [...prevProducts, { ...item, quantity: 1 }];
-      }
-    });
-  };
+    const unsubscribe = fetchCartItems();
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     calculateGrandTotal();
   }, [products]);
 
-  const increaseQuantity = (id) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === id
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
+  const fetchCartItems = () => {
+    const userEmail = auth.currentUser.email;
+
+    const q = query(
+      collection(db, "cart"),
+      where("userEmail", "==", userEmail)
     );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const productsData = [];
+      snapshot.forEach((doc) => {
+        productsData.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setProducts(productsData);
+    });
+
+    return unsubscribe;
   };
 
-  const decreaseQuantity = (id) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === id && product.quantity > 1
-          ? { ...product, quantity: product.quantity - 1 }
-          : product
-      )
-    );
+  const increaseQuantity = async (id) => {
+    await updateDoc(doc(db, "cart", id), {
+      quantity: products.find((product) => product.id === id).quantity + 1,
+    });
+  };
+
+  const decreaseQuantity = async (id) => {
+    const currentQuantity = products.find(
+      (product) => product.id === id
+    ).quantity;
+    if (currentQuantity > 1) {
+      await updateDoc(doc(db, "cart", id), { quantity: currentQuantity - 1 });
+    }
   };
 
   const calculateTotal = (product) => {
@@ -91,14 +84,36 @@ const Cart = () => {
     setGrandTotal(total.toFixed(2));
   };
 
-  const deleteItem = (id) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== id)
-    );
+  const deleteItem = async (id) => {
+    try {
+      await deleteDoc(doc(db, "cart", id));
+      console.log("Document successfully deleted!");
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
   };
 
-  const clearAll = () => {
-    setProducts([]);
+  const clearAll = async () => {
+    const userEmail = auth.currentUser.email;
+    const q = query(
+      collection(db, "cart"),
+      where("userEmail", "==", userEmail)
+    );
+    const snapshot = await getDocs(q);
+    const batch = writeBatch(db);
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+  };
+
+  const showPaymentsPage = () => {
+    const uniqueNumber = generateUniqueNumber();
+    navigation.navigate("PaymentDetails", { uniqueNumber, grandTotal });
+    console.log("navigating to the payments page");
+    console.log(
+      `Generated unique number: ${uniqueNumber} and total ${grandTotal}`
+    );
   };
 
   const generateUniqueNumber = () => {
