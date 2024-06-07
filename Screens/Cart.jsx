@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -25,6 +26,7 @@ const Cart = () => {
   const routeParams = useRoute();
   const [products, setProducts] = useState([]);
   const [grandTotal, setGrandTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = fetchCartItems();
@@ -51,6 +53,7 @@ const Cart = () => {
         });
       });
       setProducts(productsData);
+      setLoading(false); // Set loading to false once data is fetched
     });
 
     return unsubscribe;
@@ -150,12 +153,16 @@ const Cart = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shopping Cart</Text>
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.list}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#007bff" />
+      ) : (
+        <FlatList
+          data={products}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={styles.list}
+        />
+      )}
       <View style={styles.grandTotal}>
         <Text style={styles.total}>
           Total: Ksh {grandTotal !== 0 ? grandTotal : "0.00"}
@@ -177,6 +184,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: "#fff",
+    flex: 1,
   },
   title: {
     fontSize: 24,
@@ -231,6 +239,9 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontSize: 16,
     textAlign: "center",
+  },
+  checkout: {
+    alignItems: "center",
   },
 });
 

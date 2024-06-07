@@ -7,6 +7,8 @@ import {
   View,
   SafeAreaView,
   Alert,
+  ToastAndroid,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
@@ -14,9 +16,7 @@ import { auth, createUserWithEmailAndPassword } from "../Database/Config";
 
 const Signup = () => {
   const navigation = useNavigation();
-  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLinkPress = () => {
@@ -41,6 +41,15 @@ const Signup = () => {
     }
   };
 
+  const showToast = () => {
+    const message = "Still under maintenance";
+    if (Platform.OS === "android") {
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+    } else {
+      Alert.alert(message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.screenView}>
       <View style={styles.headerText}>
@@ -49,30 +58,12 @@ const Signup = () => {
       </View>
       <View style={styles.inputFieldsContainer}>
         <View style={styles.inputContainer}>
-          <Text>Full Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            value={fullName}
-            onChangeText={setFullName}
-          />
-        </View>
-        <View style={styles.inputContainer}>
           <Text>Email Address</Text>
           <TextInput
             style={styles.input}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text>Phone Number</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Phone"
-            value={phone}
-            onChangeText={setPhone}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -95,21 +86,21 @@ const Signup = () => {
           color="red"
           size={25}
           style={{ backgroundColor: "#d9d9d9" }}
-          onPress={() => console.log("Pressed")}
+          onPress={showToast}
         />
         <IconButton
           icon="facebook"
-          color="red"
+          color="blue"
           size={25}
           style={{ backgroundColor: "#d9d9d9" }}
-          onPress={() => console.log("Pressed")}
+          onPress={showToast}
         />
         <IconButton
           icon="instagram"
-          color="red"
+          color="#C13584"
           size={25}
           style={{ backgroundColor: "#d9d9d9" }}
-          onPress={() => console.log("Pressed")}
+          onPress={showToast}
         />
       </View>
       <View>
@@ -135,20 +126,26 @@ export default Signup;
 
 const styles = StyleSheet.create({
   screenView: {
-    marginTop: 50,
+    flex: 1,
+    // justifyContent: "center",
+    padding: 20,
   },
   headerText: {
-    marginTop: 10,
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 20,
   },
-  welcomeMessage: { fontSize: 40, fontWeight: "bold" },
+  welcomeMessage: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
   inputFieldsContainer: {
     alignItems: "center",
+    marginBottom: 20,
   },
   inputContainer: {
     marginVertical: 10,
-    width: "80%",
+    width: "100%",
   },
   input: {
     width: "100%",
@@ -157,39 +154,29 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10,
   },
-  googleButton: {
-    marginHorizontal: 10,
-    backgroundColor: "#D9D9D9",
-    height: 40,
-    width: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   buttonSpace: {
     marginVertical: 10,
   },
   button: {
-    marginHorizontal: "10%",
     borderRadius: 8,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 10,
     backgroundColor: "#007bff",
+    alignItems: "center",
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
     textTransform: "uppercase",
     fontSize: 16,
-    textAlign: "center",
   },
   linkText: {
-    marginLeft: "10%",
+    textAlign: "center",
+    marginTop: 10,
   },
   signupOptions: {
-    marginTop: 10,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "center",
+    marginBottom: 20,
   },
 });

@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
-  Image,
   Text,
   View,
   TextInput,
   Button,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -16,89 +14,57 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { db } from "../Database/Config";
+import { collection, addDoc } from "firebase/firestore";
 
-const LocationDetails = ({ setModalVisible }) => {
-  const [country, setCountry] = useState("");
-  const [county, setCounty] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = () => {
-    if (country && county && city && postalCode && phone && email) {
-      setModalVisible(true);
-      setTimeout(() => {
-        setModalVisible(false);
-      }, 1000);
-    } else {
-      Alert.alert("Error", "Please fill all the fields.");
-    }
-  };
-
+const LocationDetails = ({
+  setCountry,
+  setCounty,
+  setCity,
+  setPostalCode,
+  setPhone,
+  setEmail,
+}) => {
   return (
     <View style={styles.mpesaDetailsContainer}>
       <Text style={styles.mpesaDetailsText}>
         Fill your location Details here
       </Text>
-
       <TextInput
         placeholder="Country"
         style={styles.input}
-        value={country}
         onChangeText={setCountry}
       />
       <TextInput
         placeholder="County"
         style={styles.input}
-        value={county}
         onChangeText={setCounty}
       />
       <TextInput
         placeholder="Town/City"
         style={styles.input}
-        value={city}
         onChangeText={setCity}
       />
       <TextInput
         placeholder="Postal Code"
         style={styles.input}
-        value={postalCode}
         onChangeText={setPostalCode}
       />
       <TextInput
         placeholder="Phone"
         style={styles.input}
-        value={phone}
         onChangeText={setPhone}
       />
       <TextInput
-        placeholder="Email Address"
+        placeholder="enter same email as login"
         style={styles.input}
-        value={email}
         onChangeText={setEmail}
       />
-      <Button title="Submit" onPress={handleSubmit} />
     </View>
   );
 };
 
-const MpesaDetails = ({ setModalVisible }) => {
-  const [mpesaName, setMpesaName] = useState("");
-  const [mpesaCode, setMpesaCode] = useState("");
-  const [mpesaNumber, setMpesaNumber] = useState("");
-
-  const handleSubmit = () => {
-    if (mpesaName && mpesaCode && mpesaNumber) {
-      setModalVisible(true);
-      setTimeout(() => {
-        setModalVisible(false);
-      }, 1000);
-    } else {
-      Alert.alert("Error", "Please fill all the fields.");
-    }
-  };
-
+const MpesaDetails = ({ setMpesaName, setMpesaCode, setMpesaNumber }) => {
   return (
     <View style={styles.mpesaDetailsContainer}>
       <Text style={styles.mpesaDetailsText}>Paybill Number: 522522</Text>
@@ -106,47 +72,87 @@ const MpesaDetails = ({ setModalVisible }) => {
       <TextInput
         placeholder="Enter Mpesa name"
         style={styles.input}
-        value={mpesaName}
         onChangeText={setMpesaName}
       />
       <TextInput
         placeholder="Mpesa Code eg SF55GQQY7L"
         style={styles.input}
-        value={mpesaCode}
         onChangeText={setMpesaCode}
       />
       <TextInput
         placeholder="Enter Mpesa number 07xxxx"
         style={styles.input}
-        value={mpesaNumber}
         onChangeText={setMpesaNumber}
       />
-      <Button title="Submit" onPress={handleSubmit} />
     </View>
   );
 };
-
-const PaymentCard = ({ source, text, value, onPress, isSelected }) => (
-  <TouchableOpacity
-    style={[styles.paymentContainer, isSelected && styles.selectedCard]}
-    onPress={() => onPress(value)}
-  >
-    <Image source={source} style={styles.paymentIcon} />
-    <Text style={styles.paymentText}>{text}</Text>
-  </TouchableOpacity>
-);
 
 const PaymentDetails = () => {
   const route = useRoute();
   const { uniqueNumber, grandTotal } = route.params;
   const shippingFee = 150;
   const totalToPay = parseFloat(shippingFee) + parseFloat(grandTotal);
-  const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const [country, setCountry] = useState("");
+  const [county, setCounty] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [mpesaName, setMpesaName] = useState("");
+  const [mpesaCode, setMpesaCode] = useState("");
+  const [mpesaNumber, setMpesaNumber] = useState("");
+  const [userEmail, setEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleCardPress = (value) => {
-    setSelectedPayment(value);
-    console.log(value);
+  const handlePlaceOrder = async () => {
+    if (
+      country &&
+      county &&
+      city &&
+      postalCode &&
+      phone &&
+      mpesaName &&
+      mpesaCode &&
+      mpesaNumber &&
+      userEmail
+    ) {
+      // Update grandTotal with totalToPay
+      const newGrandTotal = totalToPay;
+
+      // Send the data to Firebase Firestore
+      try {
+        const orderRef = await addDoc(collection(db, "orders"), {
+          city,
+          code: postalCode,
+          country,
+          county,
+          email: userEmail,
+          grandTotal: newGrandTotal,
+          mpesaCode,
+          mpesaName,
+          mpesaNumber,
+          orderNo: uniqueNumber,
+          phone,
+        });
+
+        console.log("Order successfully placed with ID: ", orderRef.id);
+
+        // Show success modal
+        setModalVisible(true);
+        setTimeout(() => {
+          setModalVisible(false);
+        }, 1000);
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        Alert.alert(
+          "Error",
+          "Failed to place the order. Please try again later."
+        );
+      }
+    } else {
+      Alert.alert("Error", "Please fill all the fields.");
+    }
   };
 
   return (
@@ -157,44 +163,22 @@ const PaymentDetails = () => {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.productsHeader}>
-            <Text style={styles.productsHeaderText}>Shipping Information</Text>
-            <PaymentCard
-              source={require("../images/location.png")}
-              text="Location"
-              value="location"
-              onPress={handleCardPress}
-              isSelected={selectedPayment === "location"}
+            <LocationDetails
+              setCountry={setCountry}
+              setCounty={setCounty}
+              setCity={setCity}
+              setPostalCode={setPostalCode}
+              setPhone={setPhone}
+              setEmail={setEmail}
             />
-            {selectedPayment === "location" && (
-              <LocationDetails setModalVisible={setModalVisible} />
-            )}
           </View>
           <View style={styles.paymentMethods}>
             <Text style={styles.titleTwo}>Payment Method</Text>
-            <PaymentCard
-              source={require("../images/wallet.png")}
-              text="Wallet"
-              value="Wallet"
-              onPress={handleCardPress}
-              isSelected={selectedPayment === "Wallet"}
+            <MpesaDetails
+              setMpesaName={setMpesaName}
+              setMpesaCode={setMpesaCode}
+              setMpesaNumber={setMpesaNumber}
             />
-            <PaymentCard
-              source={require("../images/mastercard.png")}
-              text="Visa/Mastercard"
-              value="Visa/Mastercard"
-              onPress={handleCardPress}
-              isSelected={selectedPayment === "Visa/Mastercard"}
-            />
-            <PaymentCard
-              source={require("../images/mapesa.jpg")}
-              text="Mpesa"
-              value="Mpesa"
-              onPress={handleCardPress}
-              isSelected={selectedPayment === "Mpesa"}
-            />
-            {selectedPayment === "Mpesa" && (
-              <MpesaDetails setModalVisible={setModalVisible} />
-            )}
           </View>
           <View style={styles.subtotalSection}>
             <Text style={styles.goodsText}>Total</Text>
@@ -216,9 +200,12 @@ const PaymentDetails = () => {
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
               Ksh {totalToPay}
             </Text>
-            <TouchableOpacity>
-              <Button title="Place Order" style={{ borderRadius: 5 }} />
-            </TouchableOpacity>
+
+            <Button
+              title="Place Order"
+              style={{ borderRadius: 5 }}
+              onPress={handlePlaceOrder}
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -240,7 +227,6 @@ const PaymentDetails = () => {
 };
 
 export default PaymentDetails;
-
 const styles = StyleSheet.create({
   productsHeader: {
     marginHorizontal: "5%",
@@ -261,7 +247,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   titleTwo: {
-    fontSize: 28,
+    color: "green",
+    fontSize: 24,
     fontWeight: "bold",
   },
   paymentContainer: {
@@ -301,6 +288,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   mpesaDetailsText: {
+    fontWeight: "bold",
     fontSize: 16,
     marginBottom: 5,
   },
