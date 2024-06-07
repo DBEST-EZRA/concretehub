@@ -91,7 +91,7 @@ const ProductDetails = ({ route }) => {
       </View>
 
       <View style={styles.innerContainer}>
-        <Image style={styles.image} source={item.image} />
+        <Image source={{ uri: item.image }} style={styles.image} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>{item.name}</Text>
           <Text style={styles.textTwo}>Ksh {item.cost}</Text>

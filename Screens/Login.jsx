@@ -7,10 +7,17 @@ import {
   View,
   SafeAreaView,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { auth, signInWithEmailAndPassword } from "../Database/Config"; // Ensure correct path
+import {
+  auth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "../Database/Config"; // Ensure correct path
 
 const Login = () => {
   const navigation = useNavigation();
@@ -46,6 +53,23 @@ const Login = () => {
     navigation.navigate("Signup");
   };
 
+  const handleForgotPassword = () => {
+    if (email) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          Alert.alert("Success", "Password reset email sent!");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(`Error ${errorCode}: ${errorMessage}`);
+          Alert.alert("Error", errorMessage);
+        });
+    } else {
+      Alert.alert("Error", "Please enter your email address to reset password");
+    }
+  };
+
   const navigateToCorrectPage = (email) => {
     if (email === "onewaycompagency@gmail.com") {
       navigation.navigate("AdminPage");
@@ -57,71 +81,94 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={styles.loginContainer}>
-      <View style={styles.loginHeader}>
-        <Ionicons name="person-circle-sharp" size={168} color="#007bff" />
-        <Text style={styles.loginHeaderText}>LOGIN</Text>
-      </View>
-      <View style={styles.inputFields}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Email Address</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <Fontisto name="email" size={24} color="black" style={styles.icon} />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <View style={styles.passwordInput}>
-            <TextInput
-              style={styles.passwordTextInput}
-              placeholder="Password"
-              secureTextEntry={secureTextEntry}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <TouchableOpacity onPress={toggleSecureTextEntry}>
-              <Ionicons
-                name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
-                size={24}
-                color="black"
-                style={styles.eyeIcon}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.keyboardAvoidingView}
+    >
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <SafeAreaView style={styles.loginContainer}>
+          <View style={styles.loginHeader}>
+            <Ionicons name="person-circle-sharp" size={120} color="#007bff" />
+            <Text style={styles.loginHeaderText}>LOGIN</Text>
+          </View>
+          <View style={styles.inputFields}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Email Address</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
               />
+              <Fontisto
+                name="email"
+                size={20}
+                color="black"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Password</Text>
+              <View style={styles.passwordInput}>
+                <TextInput
+                  style={styles.passwordTextInput}
+                  placeholder="Password"
+                  secureTextEntry={secureTextEntry}
+                  value={password}
+                  onChangeText={setPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity onPress={toggleSecureTextEntry}>
+                  <Ionicons
+                    name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
+                    size={20}
+                    color="black"
+                    style={styles.eyeIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.rememberMe}>
+            <Text style={styles.rememberMeText}>Remember me</Text>
+            <TouchableOpacity onPress={handleForgotPassword}>
+              <Text style={styles.forgotPasswordText}>Forgot password</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </View>
-      <View style={styles.rememberMe}>
-        <Text style={styles.rememberMeText}>Remember me</Text>
-        <TouchableOpacity>
-          <Text style={styles.forgotPasswordText}>Forgot password</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.loginFunctions}>
-        <TouchableOpacity onPress={handleLogin}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
+          <View style={styles.loginFunctions}>
+            <TouchableOpacity onPress={handleLogin}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Login</Text>
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.linkText}>
+              Don't have an account?{" "}
+              <TouchableOpacity onPress={handleLinkPress}>
+                <Text style={styles.signUpLink}>Sign Up</Text>
+              </TouchableOpacity>
+            </Text>
           </View>
-        </TouchableOpacity>
-        <Text style={styles.linkText}>
-          Don't have an account?{" "}
-          <TouchableOpacity onPress={handleLinkPress}>
-            <Text style={styles.signUpLink}>Sign Up</Text>
-          </TouchableOpacity>
-        </Text>
-      </View>
-    </SafeAreaView>
+        </SafeAreaView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
-  loginContainer: {
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
     justifyContent: "center",
+  },
+  loginContainer: {
+    flex: 1,
+    // justifyContent: "center",
     paddingHorizontal: 20,
     backgroundColor: "#f8f8f8",
   },
@@ -133,6 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
+    marginTop: 10,
   },
   inputFields: {
     width: "100%",
@@ -151,7 +199,7 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 10,
     paddingRight: 40,
-    backgroundColor: "#d9d9d9",
+    backgroundColor: "#e0e0e0",
     fontSize: 16,
   },
   icon: {
@@ -169,7 +217,7 @@ const styles = StyleSheet.create({
     height: 40,
     paddingLeft: 10,
     paddingRight: 40,
-    backgroundColor: "#d9d9d9",
+    backgroundColor: "#e0e0e0",
     fontSize: 16,
     flex: 1,
   },
@@ -201,13 +249,15 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     backgroundColor: "#007bff",
+    width: 200,
+    alignItems: "center",
+    marginBottom: 10,
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
     textTransform: "uppercase",
     fontSize: 16,
-    textAlign: "center",
   },
   linkText: {
     fontSize: 16,

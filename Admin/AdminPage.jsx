@@ -10,7 +10,7 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import { Appbar, Searchbar, Text } from "react-native-paper";
+import { Searchbar, Text } from "react-native-paper";
 import { db } from "../Database/Config"; // Import Firestore instance
 import {
   collection,
@@ -19,7 +19,6 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
-import ImagePicker from "react-native-image-picker";
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -28,7 +27,7 @@ const AdminPage = () => {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [remaining, setRemaining] = useState("");
-  const [image, setImage] = useState(null); // New state for image
+  const [image, setImage] = useState(""); // Updated state for image URL
 
   const todoRef = collection(db, "products"); // Reference to the "products" collection
 
@@ -50,7 +49,7 @@ const AdminPage = () => {
   }, []);
 
   const addProduct = async () => {
-    if (cost && description && name && remaining) {
+    if (cost && description && name && remaining && image) {
       try {
         await addDoc(todoRef, {
           // Add document to the "products" collection
@@ -59,13 +58,13 @@ const AdminPage = () => {
           name,
           quantity: 1,
           remaining: parseInt(remaining),
-          image: image, // Add image to the product data
+          image: image, // Add image URL to the product data
         });
         setCost("");
         setDescription("");
         setName("");
         setRemaining("");
-        setImage(null); // Reset image state
+        setImage(""); // Reset image state
         setModalVisible(false);
       } catch (error) {
         Alert.alert("Error", error.message);
@@ -73,30 +72,6 @@ const AdminPage = () => {
     } else {
       Alert.alert("Error", "Please fill all the fields");
     }
-  };
-
-  // Function to handle image selection
-  const selectImage = () => {
-    const options = {
-      title: "Select Image",
-      storageOptions: {
-        skipBackup: true,
-        path: "images",
-      },
-      maxWidth: 2000,
-      maxHeight: 2000,
-      quality: 0.8,
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else {
-        setImage(response.uri);
-      }
-    });
   };
 
   const renderProduct = ({ item }) => (
@@ -122,6 +97,7 @@ const AdminPage = () => {
     setDescription(product.description);
     setName(product.name);
     setRemaining(product.remaining.toString());
+    setImage(product.image);
     setModalVisible(true);
   };
 
@@ -175,7 +151,6 @@ const AdminPage = () => {
               value={description}
               onChangeText={setDescription}
             />
-
             <TextInput
               style={styles.input}
               placeholder="Remaining"
@@ -183,17 +158,21 @@ const AdminPage = () => {
               value={remaining}
               onChangeText={setRemaining}
             />
-            {/* Button to select image */}
-            <Button title="Select Image" onPress={selectImage} />
-            {/* Display selected image */}
-            {image && (
-              <Image
-                source={{ uri: image }}
-                style={{ width: 100, height: 100 }}
+            <TextInput
+              style={styles.input}
+              placeholder="Image URL"
+              value={image}
+              onChangeText={setImage}
+            />
+            <View style={styles.buttonRow}>
+              <Button title="Submit" onPress={addProduct} />
+              <View style={styles.spacer} />
+              <Button
+                title="Cancel"
+                onPress={() => setModalVisible(false)}
+                color="red"
               />
-            )}
-            <Button title="Submit" onPress={addProduct} />
-            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+            </View>
           </View>
         </View>
       </Modal>
@@ -278,5 +257,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingLeft: 8,
     width: 200,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginTop: 10,
+  },
+  spacer: {
+    width: 10,
   },
 });

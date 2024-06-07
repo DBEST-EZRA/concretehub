@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  ActivityIndicator,
+  Button,
 } from "react-native";
 import TopNavigation from "../Navigation/TopNavigation";
 import { db, auth } from "../Database/Config"; // Import Firestore and auth instance
@@ -14,7 +16,39 @@ import { collection, onSnapshot } from "firebase/firestore"; // Import Firestore
 
 const ProductsPage = ({ navigation }) => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [userEmail, setUserEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const fetchProducts = () => {
+    setLoading(true);
+    setError(false);
+
+    const unsubscribe = onSnapshot(
+      collection(db, "products"),
+      (snapshot) => {
+        const productsData = [];
+        snapshot.forEach((doc) => {
+          productsData.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setProducts(productsData);
+        setFilteredProducts(productsData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching products: ", error);
+        setError(true);
+        setLoading(false);
+      }
+    );
+
+    return unsubscribe;
+  };
 
   useEffect(() => {
     // Fetch user's email from auth
@@ -23,28 +57,27 @@ const ProductsPage = ({ navigation }) => {
       setUserEmail(currentUser.email);
     }
 
-    // Subscribe to products collection changes
-    const unsubscribe = onSnapshot(collection(db, "products"), (snapshot) => {
-      const productsData = [];
-      snapshot.forEach((doc) => {
-        productsData.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-      });
-      setProducts(productsData);
-    });
+    // Fetch products
+    const unsubscribe = fetchProducts();
 
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    // Filter products based on search text
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [searchText, products]);
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate("ProductDetails", { item })}
+      style={styles.cardContainer}
     >
       <View style={styles.card}>
         <Image source={{ uri: item.image }} style={styles.image} />
-
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.text}>sh {item.cost}</Text>
         <Text style={styles.remaining}>{item.remaining} items left</Text>
@@ -52,33 +85,31 @@ const ProductsPage = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  const [numColumns, setNumColumns] = useState(3);
-  const [itemWidth, setItemWidth] = useState(0);
-
-  useEffect(() => {
-    const screenWidth = Dimensions.get("window").width;
-    const widthWithoutMargin = 10;
-    const marginBetweenItems = 10;
-    const calculatedItemWidth =
-      (screenWidth - widthWithoutMargin) / numColumns - marginBetweenItems;
-
-    setItemWidth(calculatedItemWidth);
-  }, [numColumns]);
+  const [numColumns, setNumColumns] = useState(2);
 
   return (
     <View style={styles.container}>
-      <TopNavigation />
+      <TopNavigation onSearch={setSearchText} />
       <View style={styles.welcomeContainer}>
         {/* <Text style={styles.welcomeText}>Welcome, {userEmail}</Text> */}
       </View>
-      <FlatList
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={numColumns}
-        contentContainerStyle={styles.listContainer}
-        columnWrapperStyle={{ justifyContent: "space-around" }}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : error ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Unable to load data</Text>
+          <Button title="Refresh" onPress={fetchProducts} />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredProducts}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          numColumns={numColumns}
+          contentContainerStyle={styles.listContainer}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
+        />
+      )}
     </View>
   );
 };
@@ -95,12 +126,25 @@ const styles = StyleSheet.create({
   listContainer: {
     justifyContent: "space-between",
   },
+  cardContainer: {
+    flex: 1,
+    margin: 5,
+  },
   card: {
-    backgroundColor: "#d9d9d9",
+    backgroundColor: "#fff",
     alignItems: "center",
     padding: 10,
     borderRadius: 10,
-    margin: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: Dimensions.get("window").width / 2 - 20,
+    height: 250,
   },
   image: {
     width: "100%",
@@ -108,15 +152,19 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
+    marginVertical: 5,
+    textAlign: "center",
   },
   text: {
     fontSize: 16,
+    textAlign: "center",
   },
   remaining: {
-    fontSize: 16,
+    fontSize: 14,
     fontStyle: "italic",
+    textAlign: "center",
   },
   welcomeContainer: {
     alignItems: "center",
@@ -125,5 +173,13 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  errorContainer: {
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
+    marginBottom: 10,
   },
 });
