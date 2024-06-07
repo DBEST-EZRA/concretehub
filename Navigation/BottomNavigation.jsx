@@ -12,6 +12,7 @@ import Help from "../Screens/Help";
 import ProductsPage from "../Screens/ProductsPage";
 import AdminPage from "../Screens/Admin/AdminPage";
 import Finance from "../Screens/Admin/Finance";
+import Drivers from "../Screens/Drivers/Drivers";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ const BottomNavigation = () => {
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="ProductsPage"
-        component={ProductsPage}
+        component={Drivers}
         options={{
           tabBarIcon: ({ focused }) => (
             <Ionicons
