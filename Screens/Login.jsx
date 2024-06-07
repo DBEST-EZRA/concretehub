@@ -73,8 +73,10 @@ const Login = () => {
   const navigateToCorrectPage = (email) => {
     if (email === "onewaycompagency@gmail.com") {
       navigation.navigate("AdminPage");
-    } else if (email === "finance@mail.com") {
+    } else if (email === "ezradbest101@gmail.com") {
       navigation.navigate("FinancePage");
+    } else if (email === "ezradbest1on1@gmail.com") {
+      navigation.navigate("DriverPage");
     } else {
       navigation.navigate("Home");
     }
