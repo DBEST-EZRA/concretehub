@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   remaining: {
+    color: "red",
     fontSize: 14,
     fontStyle: "italic",
     textAlign: "center",
