@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import CircleButton from "./CircleButton";
 
 const Contact = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -125,43 +124,27 @@ const Contact = () => {
           Need To Get In Touch With Us?
         </Text>
         <View style={styles.innerContainer}>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
           <Text style={{ fontSize: 16 }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
-            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
-            nostrum laudantium laborum quaerat, laboriosam alias veniam
-            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
-            libero ullam nesciunt magnam perspiciatis?
+            ConcreteHub is a leading provider of high-quality concrete products
+            and solutions. We specialize in delivering durable and sustainable
+            concrete materials for various construction projects, ranging from
+            residential buildings to large-scale infrastructure developments.
           </Text>
         </View>
         <View style={styles.innerContainer}>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
           <Text style={{ fontSize: 16 }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
-            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
-            nostrum laudantium laborum quaerat, laboriosam alias veniam
-            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
-            libero ullam nesciunt magnam perspiciatis?
+            With a team of experienced professionals and state-of-the-art
+            facilities, we ensure that our concrete meets the highest standards
+            of quality and reliability. Our commitment to innovation and
+            customer satisfaction drives us to continuously improve and adapt to
+            the evolving needs of the construction industry.
           </Text>
         </View>
         <View style={styles.innerContainer}>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
           <Text style={{ fontSize: 16 }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
-            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
-            nostrum laudantium laborum quaerat, laboriosam alias veniam
-            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
-            libero ullam nesciunt magnam perspiciatis?
-          </Text>
-        </View>
-        <View style={styles.innerContainer}>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Phone Call</Text>
-          <Text style={{ fontSize: 16 }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
-            incidunt corporis voluptate aliquid consequuntur! Quidem voluptas
-            nostrum laudantium laborum quaerat, laboriosam alias veniam
-            molestiae ea rerum doloremque culpa consequatur maxime optio iusto
-            libero ullam nesciunt magnam perspiciatis?
+            Whether you're a contractor, builder, or homeowner, you can rely on
+            ConcreteHub for all your concrete needs. Contact us today to learn
+            more about our products and services.
           </Text>
         </View>
 
@@ -194,7 +177,7 @@ export default Contact;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     padding: 16,
     backgroundColor: "#f8f8f8",
   },
@@ -214,9 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   fabContainer: {
-    position: "absolute",
-    right: 30,
-    bottom: 80, // Adjusted to raise FAB container
+    right: 5,
     alignItems: "center",
   },
   fab: {

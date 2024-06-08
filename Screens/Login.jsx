@@ -36,6 +36,8 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           Alert.alert("Success", "Logged in successfully");
+          setEmail("");
+          setPassword("");
           navigateToCorrectPage(email); // Navigate based on user's email
         })
         .catch((error) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -9,8 +9,11 @@ import {
   FlatList,
   Pressable,
   Image,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
-import { Searchbar, Text } from "react-native-paper";
+import { Searchbar, Text, Card } from "react-native-paper";
 import { db } from "../Database/Config"; // Import Firestore instance
 import {
   collection,
@@ -18,7 +21,13 @@ import {
   onSnapshot,
   deleteDoc,
   doc,
+  query,
+  where,
+  limit,
+  startAfter,
+  getDocs,
 } from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
+import { AntDesign } from "@expo/vector-icons"; // Import AntDesign for delete icon
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -28,6 +37,10 @@ const AdminPage = () => {
   const [name, setName] = useState("");
   const [remaining, setRemaining] = useState("");
   const [image, setImage] = useState(""); // Updated state for image URL
+
+  const [orders, setOrders] = useState([]);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const todoRef = collection(db, "products"); // Reference to the "products" collection
 
@@ -46,6 +59,59 @@ const AdminPage = () => {
     });
 
     return () => unsubscribe();
+  }, []);
+
+  const fetchOrders = async (startAfterDoc = null) => {
+    setLoading(true);
+    let q = query(collection(db, "orders"), limit(20));
+    if (startAfterDoc) {
+      q = query(collection(db, "orders"), startAfter(startAfterDoc), limit(20));
+    }
+
+    const querySnapshot = await getDocs(q);
+    const newOrders = [];
+    let lastVisible = null;
+
+    querySnapshot.forEach((doc) => {
+      const orderData = doc.data();
+      newOrders.push({
+        id: doc.id,
+        ...orderData,
+      });
+      lastVisible = doc;
+    });
+
+    const fetchCartData = async (order) => {
+      const cartCollection = collection(db, "cart");
+      const cartQuery = query(
+        cartCollection,
+        where("userEmail", "==", order.email)
+      );
+      const cartSnapshot = await getDocs(cartQuery);
+      const cartData = cartSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      return cartData;
+    };
+
+    for (let order of newOrders) {
+      order.cart = await fetchCartData(order);
+    }
+
+    setOrders((prevOrders) => {
+      const orderMap = {};
+      [...prevOrders, ...newOrders].forEach((order) => {
+        orderMap[order.id] = order;
+      });
+      return Object.values(orderMap);
+    });
+    setLastDoc(lastVisible);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
 
   const addProduct = async () => {
@@ -74,22 +140,25 @@ const AdminPage = () => {
     }
   };
 
-  const renderProduct = ({ item }) => (
-    <Pressable style={styles.card} onLongPress={() => editProduct(item)}>
-      <Text style={{ color: "#007bff", fontSize: 16 }}>{item.name}</Text>
-      {/* Display image if available */}
-      {item.image && (
-        <Image
-          source={{ uri: item.image }}
-          style={{ width: 100, height: 100 }}
-        />
-      )}
-      <Text style={styles.text}>Cost: {item.cost}</Text>
-      <Text style={styles.text}>Description: {item.description}</Text>
-      <Text style={styles.text}>Quantity: {item.quantity}</Text>
-      <Text style={styles.text}>Remaining: {item.remaining}</Text>
-      <Button title="Delete" onPress={() => deleteProduct(item.id)} />
-    </Pressable>
+  const renderProduct = useCallback(
+    ({ item }) => (
+      <Pressable style={styles.card} onLongPress={() => editProduct(item)}>
+        <Text style={{ color: "#007bff", fontSize: 16 }}>{item.name}</Text>
+        {/* Display image if available */}
+        {item.image && (
+          <Image
+            source={{ uri: item.image }}
+            style={{ width: 100, height: 100 }}
+          />
+        )}
+        <Text style={styles.text}>Cost: {item.cost}</Text>
+        <Text style={styles.text}>Description: {item.description}</Text>
+        <Text style={styles.text}>Quantity: {item.quantity}</Text>
+        <Text style={styles.text}>Remaining: {item.remaining}</Text>
+        <Button title="Delete" onPress={() => deleteProduct(item.id)} />
+      </Pressable>
+    ),
+    []
   );
 
   const editProduct = (product) => {
@@ -109,19 +178,85 @@ const AdminPage = () => {
     }
   };
 
+  const deleteOrder = async (id) => {
+    try {
+      await deleteDoc(doc(collection(db, "orders"), id)); // Delete document from the "orders" collection
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
   return (
     <View style={{ backgroundColor: "#f8f8f8", flex: 1 }}>
       <Searchbar style={styles.search} placeholder="Search" />
       <Button title="Add Product" onPress={() => setModalVisible(true)} />
       <View style={styles.scrollContainer}>
-        <Text style={styles.sectionHeader} onPress={() => {}}>
-          Products Details
-        </Text>
+        <Text style={styles.sectionHeader}>Products Details</Text>
         <FlatList
           data={products}
           renderItem={renderProduct}
           keyExtractor={(item) => item.id}
         />
+      </View>
+      <View style={styles.orderDetailsContainer}>
+        <Text style={styles.sectionHeader}>Order Details</Text>
+        {loading && <ActivityIndicator size="large" color="#007bff" />}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {orders.map((order) => (
+            <Card key={order.id} style={styles.orderCard}>
+              <Card.Content>
+                <Text style={styles.cardText}>
+                  Order No:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.orderNo}</Text>
+                </Text>
+                <Text style={styles.cardText}>
+                  Grand Total:{" "}
+                  <Text style={{ fontWeight: "bold" }}>
+                    Ksh {order.grandTotal}
+                  </Text>
+                </Text>
+                <Text style={styles.cardText}>
+                  MPESA Code:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.mpesaCode}</Text>
+                </Text>
+                <Text style={styles.cardText}>
+                  MPESA Number:{" "}
+                  <Text style={{ fontWeight: "bold" }}>
+                    {order.mpesaNumber}
+                  </Text>
+                </Text>
+                {order.cart &&
+                  order.cart.map((item) => (
+                    <View key={item.id}>
+                      <Text style={styles.cardTextGreen}>
+                        {item.name} - {item.quantity}
+                      </Text>
+                    </View>
+                  ))}
+                <TouchableOpacity
+                  style={styles.deleteIcon}
+                  onPress={() => deleteOrder(order.id)}
+                >
+                  <AntDesign name="delete" size={24} color="red" />
+                </TouchableOpacity>
+              </Card.Content>
+            </Card>
+          ))}
+        </ScrollView>
+        <View style={styles.pagination}>
+          <Button
+            title="Previous"
+            onPress={() => {
+              // Implement previous button logic
+            }}
+            disabled={!lastDoc}
+          />
+          <Button
+            title="Next"
+            onPress={() => fetchOrders(lastDoc)}
+            disabled={!lastDoc}
+          />
+        </View>
       </View>
       <Modal
         animationType="slide"
@@ -219,6 +354,35 @@ const styles = StyleSheet.create({
     elevation: 10,
     backgroundColor: "#f8f8f8",
   },
+  orderDetailsContainer: {
+    backgroundColor: "#ADD8E6",
+    flex: 1,
+    padding: 10,
+  },
+  orderCard: {
+    marginRight: 10,
+    width: 300,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  cardText: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  cardTextGreen: {
+    color: "green",
+    fontSize: 16,
+    marginBottom: 5,
+    fontWeight: "bold",
+  },
+  pagination: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
   text: {
     fontSize: 16,
   },
@@ -267,5 +431,10 @@ const styles = StyleSheet.create({
   },
   spacer: {
     width: 10,
+  },
+  deleteIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   },
 });
