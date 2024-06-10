@@ -11,6 +11,7 @@ import {
   ScrollView,
   Modal,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -104,6 +105,7 @@ const PaymentDetails = () => {
   const [mpesaNumber, setMpesaNumber] = useState("");
   const [userEmail, setEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handlePlaceOrder = async () => {
     if (
@@ -119,6 +121,8 @@ const PaymentDetails = () => {
     ) {
       // Update grandTotal with totalToPay
       const newGrandTotal = totalToPay;
+
+      setLoading(true); // Start spinner
 
       // Send the data to Firebase Firestore
       try {
@@ -202,9 +206,10 @@ const PaymentDetails = () => {
             </Text>
 
             <Button
-              title="Place Order"
+              title={loading ? "Placing Order..." : "Place Order"} // Button title changes based on loading state
               style={{ borderRadius: 5 }}
               onPress={handlePlaceOrder}
+              disabled={loading} // Disable button when loading
             />
           </View>
         </ScrollView>

@@ -8,6 +8,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +18,7 @@ import { addDoc, collection } from "firebase/firestore"; // Import Firestore fun
 const ProductDetails = ({ route }) => {
   const { item } = route.params;
   const [addedToCart, setAddedToCart] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
   const navigation = useNavigation();
 
   const [userEmail, setUserEmail] = useState(null);
@@ -59,6 +61,7 @@ const ProductDetails = ({ route }) => {
       return;
     }
 
+    setLoading(true); // Start loading
     try {
       // Add item to cart collection in Firestore
       const cartRef = collection(db, "cart");
@@ -70,8 +73,10 @@ const ProductDetails = ({ route }) => {
       });
 
       setAddedToCart(true);
+      setLoading(false); // End loading
       console.log("Adding item to Cart:", item);
     } catch (error) {
+      setLoading(false); // End loading
       console.error("Error adding item to cart:", error);
     }
   };
@@ -104,13 +109,20 @@ const ProductDetails = ({ route }) => {
           {item.description || "No description available."}
         </Text>
 
-        <TouchableOpacity onPress={addToCart} disabled={addedToCart}>
+        <TouchableOpacity onPress={addToCart} disabled={loading || addedToCart}>
           <View
             style={[styles.button, addedToCart && styles.addedToCartButton]}
           >
-            <Text style={styles.buttonText}>
-              {addedToCart ? "Added To Cart" : "Add To Cart"}
-            </Text>
+            {loading ? (
+              <View style={styles.spinnerContainer}>
+                <ActivityIndicator size="small" color="#fff" />
+                <Text style={styles.spinnerText}>Adding to cart</Text>
+              </View>
+            ) : (
+              <Text style={styles.buttonText}>
+                {addedToCart ? "Added To Cart" : "Add To Cart"}
+              </Text>
+            )}
           </View>
         </TouchableOpacity>
 
@@ -212,6 +224,8 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     backgroundColor: "#007bff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   addedToCartButton: {
     backgroundColor: "green",
@@ -222,5 +236,16 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontSize: 16,
     textAlign: "center",
+  },
+  spinnerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  spinnerText: {
+    color: "white",
+    marginLeft: 10,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: 16,
   },
 });

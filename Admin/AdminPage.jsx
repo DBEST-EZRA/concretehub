@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRoute } from "react";
 import {
   View,
   StyleSheet,
+  SafeAreaView,
   Modal,
   TextInput,
   Button,
@@ -30,7 +31,7 @@ import {
 } from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -226,10 +227,13 @@ const AdminPage = () => {
   };
 
   const deleteOrder = async (id) => {
+    setLoading(true);
     try {
       await deleteDoc(doc(collection(db, "orders"), id));
     } catch (error) {
       Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false); // Stop spinner
     }
   };
 
