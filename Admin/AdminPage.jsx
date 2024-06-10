@@ -18,6 +18,7 @@ import { db, storage } from "../Database/Config";
 import {
   collection,
   addDoc,
+  updateDoc,
   onSnapshot,
   deleteDoc,
   doc,
@@ -39,6 +40,7 @@ const AdminPage = () => {
   const [name, setName] = useState("");
   const [remaining, setRemaining] = useState("");
   const [image, setImage] = useState(null);
+  const [editProductId, setEditProductId] = useState(null);
 
   const [orders, setOrders] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
@@ -150,25 +152,32 @@ const AdminPage = () => {
     });
   };
 
-  const addProduct = async () => {
+  const handleProductSubmit = async () => {
     if (cost && description && name && remaining && image) {
       try {
         const imageUrl = await uploadImage(image);
-
-        await addDoc(todoRef, {
+        const productData = {
           cost: parseFloat(cost),
           description,
           name,
           quantity: 1,
           remaining: parseInt(remaining),
           image: imageUrl,
-        });
+        };
+
+        if (editProductId) {
+          const productRef = doc(todoRef, editProductId);
+          await updateDoc(productRef, productData);
+        } else {
+          await addDoc(todoRef, productData);
+        }
 
         setCost("");
         setDescription("");
         setName("");
         setRemaining("");
         setImage(null);
+        setEditProductId(null);
         setModalVisible(false);
       } catch (error) {
         Alert.alert("Error", error.message);
@@ -204,6 +213,7 @@ const AdminPage = () => {
     setName(product.name);
     setRemaining(product.remaining.toString());
     setImage(product.image);
+    setEditProductId(product.id);
     setModalVisible(true);
   };
 
@@ -248,18 +258,21 @@ const AdminPage = () => {
                 </Text>
                 <Text style={styles.cardText}>
                   Grand Total:{" "}
-                  <Text style={styles.cardTextGreen}>${order.grandTotal}</Text>
+                  <Text style={styles.cardTextGreen}>
+                    Ksh {order.grandTotal}
+                  </Text>
                 </Text>
                 <Text style={styles.cardText}>
-                  Address:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{order.address}</Text>
+                  Postal Address:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.code}</Text>
                 </Text>
                 <Text style={styles.cardText}>
-                  Name: <Text style={{ fontWeight: "bold" }}>{order.name}</Text>
+                  Phone:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.phone}</Text>
                 </Text>
                 <Text style={styles.cardText}>
-                  Status:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{order.status}</Text>
+                  Txn ref:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.mpesaCode}</Text>
                 </Text>
                 <FlatList
                   data={order.cart}
@@ -297,7 +310,9 @@ const AdminPage = () => {
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Add Product</Text>
+            <Text style={styles.modalText}>
+              {editProductId ? "Edit Product" : "Add Product"}
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Name"
@@ -329,11 +344,14 @@ const AdminPage = () => {
               <Image source={{ uri: image }} style={styles.imagePreview} />
             )}
             <View style={styles.buttonRow}>
-              <Button title="Submit" onPress={addProduct} />
+              <Button title="Submit" onPress={handleProductSubmit} />
               <View style={styles.spacer} />
               <Button
                 title="Cancel"
-                onPress={() => setModalVisible(false)}
+                onPress={() => {
+                  setModalVisible(false);
+                  setEditProductId(null);
+                }}
                 color="red"
               />
             </View>
