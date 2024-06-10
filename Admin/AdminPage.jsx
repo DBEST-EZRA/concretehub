@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Searchbar, Text, Card } from "react-native-paper";
-import { db } from "../Database/Config"; // Import Firestore instance
+import { db, storage } from "../Database/Config";
 import {
   collection,
   addDoc,
@@ -26,8 +26,10 @@ import {
   limit,
   startAfter,
   getDocs,
-} from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
-import { AntDesign } from "@expo/vector-icons"; // Import AntDesign for delete icon
+} from "firebase/firestore";
+import * as ImagePicker from "expo-image-picker";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { AntDesign } from "@expo/vector-icons";
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -36,17 +38,16 @@ const AdminPage = () => {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [remaining, setRemaining] = useState("");
-  const [image, setImage] = useState(""); // Updated state for image URL
+  const [image, setImage] = useState(null);
 
   const [orders, setOrders] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const todoRef = collection(db, "products"); // Reference to the "products" collection
+  const todoRef = collection(db, "products");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(todoRef, (querySnapshot) => {
-      // Listen for changes in the "products" collection
       const products = [];
       querySnapshot.forEach((doc) => {
         const productData = doc.data();
@@ -114,23 +115,60 @@ const AdminPage = () => {
     fetchOrders();
   }, []);
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const filename = uri.substring(uri.lastIndexOf("/") + 1);
+    const imageRef = ref(storage, filename);
+    const uploadTask = uploadBytesResumable(imageRef, blob);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          reject(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        }
+      );
+    });
+  };
+
   const addProduct = async () => {
     if (cost && description && name && remaining && image) {
       try {
+        const imageUrl = await uploadImage(image);
+
         await addDoc(todoRef, {
-          // Add document to the "products" collection
           cost: parseFloat(cost),
           description,
           name,
           quantity: 1,
           remaining: parseInt(remaining),
-          image: image, // Add image URL to the product data
+          image: imageUrl,
         });
+
         setCost("");
         setDescription("");
         setName("");
         setRemaining("");
-        setImage(""); // Reset image state
+        setImage(null);
         setModalVisible(false);
       } catch (error) {
         Alert.alert("Error", error.message);
@@ -144,7 +182,6 @@ const AdminPage = () => {
     ({ item }) => (
       <Pressable style={styles.card} onLongPress={() => editProduct(item)}>
         <Text style={{ color: "#007bff", fontSize: 16 }}>{item.name}</Text>
-        {/* Display image if available */}
         {item.image && (
           <Image
             source={{ uri: item.image }}
@@ -172,7 +209,7 @@ const AdminPage = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await deleteDoc(doc(todoRef, id)); // Delete document from the "products" collection
+      await deleteDoc(doc(todoRef, id));
     } catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -180,7 +217,7 @@ const AdminPage = () => {
 
   const deleteOrder = async (id) => {
     try {
-      await deleteDoc(doc(collection(db, "orders"), id)); // Delete document from the "orders" collection
+      await deleteDoc(doc(collection(db, "orders"), id));
     } catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -211,28 +248,33 @@ const AdminPage = () => {
                 </Text>
                 <Text style={styles.cardText}>
                   Grand Total:{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    Ksh {order.grandTotal}
-                  </Text>
+                  <Text style={styles.cardTextGreen}>${order.grandTotal}</Text>
                 </Text>
                 <Text style={styles.cardText}>
-                  MPESA Code:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{order.mpesaCode}</Text>
+                  Address:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.address}</Text>
                 </Text>
                 <Text style={styles.cardText}>
-                  MPESA Number:{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {order.mpesaNumber}
-                  </Text>
+                  Name: <Text style={{ fontWeight: "bold" }}>{order.name}</Text>
                 </Text>
-                {order.cart &&
-                  order.cart.map((item) => (
-                    <View key={item.id}>
-                      <Text style={styles.cardTextGreen}>
-                        {item.name} - {item.quantity}
+                <Text style={styles.cardText}>
+                  Status:{" "}
+                  <Text style={{ fontWeight: "bold" }}>{order.status}</Text>
+                </Text>
+                <FlatList
+                  data={order.cart}
+                  renderItem={({ item }) => (
+                    <View>
+                      <Text style={styles.cardText}>
+                        Product Name: {item.name}
+                      </Text>
+                      <Text style={styles.cardText}>
+                        Product Quantity: {item.quantity}
                       </Text>
                     </View>
-                  ))}
+                  )}
+                  keyExtractor={(item) => item.id}
+                />
                 <TouchableOpacity
                   style={styles.deleteIcon}
                   onPress={() => deleteOrder(order.id)}
@@ -244,13 +286,7 @@ const AdminPage = () => {
           ))}
         </ScrollView>
         <View style={styles.pagination}>
-          <Button
-            title="Previous"
-            onPress={() => {
-              // Implement previous button logic
-            }}
-            disabled={!lastDoc}
-          />
+          <Button title="Previous" onPress={() => fetchOrders()} />
           <Button
             title="Next"
             onPress={() => fetchOrders(lastDoc)}
@@ -258,12 +294,7 @@ const AdminPage = () => {
           />
         </View>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Add Product</Text>
@@ -293,12 +324,10 @@ const AdminPage = () => {
               value={remaining}
               onChangeText={setRemaining}
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Image URL"
-              value={image}
-              onChangeText={setImage}
-            />
+            <Button title="Pick an image from gallery" onPress={pickImage} />
+            {image && (
+              <Image source={{ uri: image }} style={styles.imagePreview} />
+            )}
             <View style={styles.buttonRow}>
               <Button title="Submit" onPress={addProduct} />
               <View style={styles.spacer} />
@@ -436,5 +465,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
+  },
+  imagePreview: {
+    width: 200,
+    height: 200,
+    marginBottom: 10,
   },
 });
