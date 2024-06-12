@@ -34,8 +34,8 @@ const ProductDetails = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `Check out this product: ${item.name}\n\nPrice: Ksh ${
-          item.cost
+        message: `Check out this product: ${item.name}\n\nPrice: ${
+          item.min_price
         }\n\nDescription: ${
           item.description || "No description available."
         }\n\nDownload the app Concrete Hub from the Google Play Store for more amazing products!`,
@@ -67,7 +67,7 @@ const ProductDetails = ({ route }) => {
       const cartRef = collection(db, "cart");
       await addDoc(cartRef, {
         name: item.name,
-        cost: item.cost,
+        cost: item.min_price,
         quantity: 1, // Default quantity is 1, you can change it as per your requirement
         userEmail: userEmail, // Add user's email to the cart item
       });
@@ -96,10 +96,10 @@ const ProductDetails = ({ route }) => {
       </View>
 
       <View style={styles.innerContainer}>
-        <Image source={{ uri: item.image }} style={styles.image} />
+        <Image source={{ uri: item.base_image.small_image_url }} style={styles.image} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>{item.name}</Text>
-          <Text style={styles.textTwo}>Ksh {item.cost}</Text>
+          <Text style={styles.textTwo}> {item.min_price}</Text>
         </View>
       </View>
 

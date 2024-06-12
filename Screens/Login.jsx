@@ -13,11 +13,6 @@ import {
 } from "react-native";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import {
-  auth,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "../Database/Config"; // Ensure correct path
 
 const Login = () => {
   const navigation = useNavigation();
@@ -32,19 +27,27 @@ const Login = () => {
 
   const handleLogin = () => {
     if (email && password) {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          Alert.alert("Success", "Logged in successfully");
-          setEmail("");
-          setPassword("");
-          navigateToCorrectPage(email); // Navigate based on user's email
+      fetch("http://localhost:8000/api/v1/customer/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            Alert.alert("Success", "Logged in successfully");
+            setEmail("");
+            setPassword("");
+            navigateToCorrectPage(email); // Navigate based on user's email
+          } else {
+            Alert.alert("Invalid Credentials", data.message || "An error occurred");
+          }
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(`Error ${errorCode}: ${errorMessage}`);
-          Alert.alert("Invalid Credentials", errorMessage);
+          console.error("Error logging in: ", error);
+          Alert.alert("Error", "An error occurred while logging in");
         });
     } else {
       Alert.alert("Error", "Please fill all the fields");
@@ -57,15 +60,24 @@ const Login = () => {
 
   const handleForgotPassword = () => {
     if (email) {
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          Alert.alert("Success", "Password reset email sent!");
+      fetch("http://localhost:8000/api/v1/customer/password/reset", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            Alert.alert("Success", "Password reset email sent!");
+          } else {
+            Alert.alert("Error", data.message || "An error occurred");
+          }
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(`Error ${errorCode}: ${errorMessage}`);
-          Alert.alert("Error", errorMessage);
+          console.error("Error sending password reset email: ", error);
+          Alert.alert("Error", "An error occurred while sending the password reset email");
         });
     } else {
       Alert.alert("Error", "Please enter your email address to reset password");
