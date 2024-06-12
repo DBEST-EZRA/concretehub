@@ -9,13 +9,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGESENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID,
+  apiKey: "AIzaSyChKYBll1qysNS6k6Nv6cKOB-cupEhfvlQ",
+  authDomain: "concretehub-328a7.firebaseapp.com",
+  projectId: "concretehub-328a7",
+  storageBucket: "concretehub-328a7.appspot.com",
+  messagingSenderId: "558899913278",
+  appId: "1:558899913278:web:400c136ee7b7296956a76f",
+  measurementId: "G-LGWB0807M2",
 };
 
 const firebaseApp = initializeApp(firebaseConfig);

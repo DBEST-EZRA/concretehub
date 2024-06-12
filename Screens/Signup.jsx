@@ -9,36 +9,65 @@ import {
   Alert,
   ToastAndroid,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
-import { auth, createUserWithEmailAndPassword } from "../Database/Config";
 
-const Signup = () => {
+const RegisterCustomer = () => {
   const navigation = useNavigation();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLinkPress = () => {
     navigation.navigate("Login");
   };
 
-  const handleSignup = () => {
-    if (email && password) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          Alert.alert("Success", "Account created successfully");
-          // You can also navigate the user to another screen or update user profile here
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          Alert.alert("Error", errorMessage);
-        });
-    } else {
+  const handleRegister = () => {
+    if (!firstName || !lastName || !email || !password || !passwordConfirmation) {
       Alert.alert("Error", "Please fill all the fields");
+      return;
     }
+
+    if (password !== passwordConfirmation) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+
+    fetch("http://localhost:8000/api/v1/customer/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+        password_confirmation: passwordConfirmation,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setLoading(false);
+        if (data.message) {
+          Alert.alert("Success", "Customer registered successfully");
+          navigation.navigate("ProductsPage"); // Navigate to ProductsPage
+        } else {
+          Alert.alert("Error", data.message || "An error occurred");
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error registering customer: ", error);
+        Alert.alert("Error", "An error occurred while registering the customer");
+      });
   };
 
   const showToast = () => {
@@ -58,12 +87,32 @@ const Signup = () => {
       </View>
       <View style={styles.inputFieldsContainer}>
         <View style={styles.inputContainer}>
+          <Text>First Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="First Name"
+            value={firstName}
+            onChangeText={setFirstName}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text>Last Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Last Name"
+            value={lastName}
+            onChangeText={setLastName}
+          />
+        </View>
+        <View style={styles.inputContainer}>
           <Text>Email Address</Text>
           <TextInput
             style={styles.input}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.inputContainer}>
@@ -74,6 +123,16 @@ const Signup = () => {
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text>Confirm Password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            secureTextEntry={true}
+            value={passwordConfirmation}
+            onChangeText={setPasswordConfirmation}
           />
         </View>
       </View>
@@ -104,9 +163,13 @@ const Signup = () => {
         />
       </View>
       <View>
-        <TouchableOpacity style={styles.buttonSpace} onPress={handleSignup}>
+        <TouchableOpacity style={styles.buttonSpace} onPress={handleRegister} disabled={loading}>
           <View style={styles.button}>
-            <Text style={styles.buttonText}>Sign up</Text>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Sign up</Text>
+            )}
           </View>
         </TouchableOpacity>
         <Text style={styles.linkText}>
@@ -122,12 +185,11 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default RegisterCustomer;
 
 const styles = StyleSheet.create({
   screenView: {
     flex: 1,
-    // justifyContent: "center",
     padding: 20,
   },
   headerText: {

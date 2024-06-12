@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomNavigation from "./Navigation/BottomNavigation.jsx";
 import ProductDetails from "./Screens/ProductDetails.jsx";
+import ProductsPage from "./Screens/ProductsPage.jsx";
 import Login from "./Screens/Login.jsx";
 import Signup from "./Screens/Signup.jsx";
 import Cart from "./Screens/Cart.jsx";
@@ -36,6 +37,7 @@ function HomeStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      <Stack.Screen name="ProductsPage" component={ProductsPage} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Cart" component={Cart} />
