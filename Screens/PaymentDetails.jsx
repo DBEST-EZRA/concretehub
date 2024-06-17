@@ -15,8 +15,8 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { db } from "../Database/Config";
-import { collection, addDoc } from "firebase/firestore";
+// import { db } from "../Database/Config";
+// import { collection, addDoc } from "firebase/firestore";
 
 const LocationDetails = ({
   setCountry,

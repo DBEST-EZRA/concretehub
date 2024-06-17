@@ -23,7 +23,7 @@ const ProductsPage = ({ navigation }) => {
     setLoading(true);
     setError(false);
 
-    fetch('http://localhost:8000/api/products')
+    fetch("https://6cba-102-210-40-234.ngrok-free.app/api/products")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.data);
@@ -54,7 +54,10 @@ const ProductsPage = ({ navigation }) => {
       style={styles.cardContainer}
     >
       <View style={styles.card}>
-        <Image source={{ uri: item.base_image.small_image_url }} style={styles.image} />
+        <Image
+          source={{ uri: item.base_image.small_image_url }}
+          style={styles.image}
+        />
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.text}>{item.min_price}</Text>
         {/* <Text style={styles.remaining}>{item.remaining} items left</Text> */}
@@ -156,7 +159,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
 
 // import React, { useState, useEffect } from "react";
 // import {

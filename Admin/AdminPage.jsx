@@ -30,7 +30,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+// import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 const AdminPage = () => {

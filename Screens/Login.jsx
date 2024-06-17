@@ -27,22 +27,34 @@ const Login = () => {
 
   const handleLogin = () => {
     if (email && password) {
-      fetch("http://localhost:8000/api/v1/customer/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("device_name", "ReactNativeApp");
+
+      fetch(
+        "https://6cba-102-210-40-234.ngrok-free.app/api/v1/customer/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+          },
+          body: formData,
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
             Alert.alert("Success", "Logged in successfully");
             setEmail("");
             setPassword("");
-            navigateToCorrectPage(email); // Navigate based on user's email
+            navigateToCorrectPage(email);
           } else {
-            Alert.alert("Invalid Credentials", data.message || "An error occurred");
+            Alert.alert(
+              "Successful!!",
+              data.message || "An error occurred"
+            );
           }
         })
         .catch((error) => {
@@ -60,7 +72,7 @@ const Login = () => {
 
   const handleForgotPassword = () => {
     if (email) {
-      fetch("http://localhost:8000/api/v1/customer/password/reset", {
+      fetch("http://10.0.2.2:8000/api/v1/customer/password/reset", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +89,10 @@ const Login = () => {
         })
         .catch((error) => {
           console.error("Error sending password reset email: ", error);
-          Alert.alert("Error", "An error occurred while sending the password reset email");
+          Alert.alert(
+            "Error",
+            "An error occurred while sending the password reset email"
+          );
         });
     } else {
       Alert.alert("Error", "Please enter your email address to reset password");
@@ -85,16 +100,17 @@ const Login = () => {
   };
 
   const navigateToCorrectPage = (email) => {
-    if (email === "onewaycompagency@gmail.com") {
+    if (email === "admin@example.com") {
       navigation.navigate("AdminPage");
-    } else if (email === "ezradbest101@gmail.com") {
+    } else if (email === "finance@gmail.com") {
       navigation.navigate("FinancePage");
-    } else if (email === "ezradbest1on1@gmail.com") {
+    } else if (email === "driver@gmail.com") {
       navigation.navigate("DriverPage");
     } else {
       navigation.navigate("Home");
     }
   };
+
 
   return (
     <KeyboardAvoidingView

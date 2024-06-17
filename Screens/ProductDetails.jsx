@@ -13,7 +13,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../Database/Config"; // Import Firestore and auth instance
-import { addDoc, collection } from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
+// import { addDoc, collection } from "firebase/firestore"; // Import Firestore functions from v9 modular SDK
 
 const ProductDetails = ({ route }) => {
   const { item } = route.params;

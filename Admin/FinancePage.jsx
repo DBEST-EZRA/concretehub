@@ -8,67 +8,67 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Card } from "react-native-paper";
-import { db } from "../Database/Config"; // Import Firestore instance
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+// mport { db } from "../Database/Config"; // Import Firestore instance
+// import { collection, onSnapshot, query, where } from "firebase/firestore";i
 
 const FinancePage = () => {
   const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
 
-  useEffect(() => {
-    const fetchOrders = () => {
-      const ordersCollection = collection(db, "orders");
-      onSnapshot(ordersCollection, (snapshot) => {
-        const ordersData = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setOrders(ordersData);
-        setFilteredOrders(ordersData);
-      });
-    };
-    fetchOrders();
-  }, []);
+  // useEffect(() => {
+  //   const fetchOrders = () => {
+  //     const ordersCollection = collection(db, "orders");
+  //     onSnapshot(ordersCollection, (snapshot) => {
+  //       const ordersData = snapshot.docs.map((doc) => ({
+  //         ...doc.data(),
+  //         id: doc.id,
+  //       }));
+  //       setOrders(ordersData);
+  //       setFilteredOrders(ordersData);
+  //     });
+  //   };
+  //   fetchOrders();
+  // }, []);
 
-  useEffect(() => {
-    const fetchCartData = () => {
-      orders.forEach((order) => {
-        const cartCollection = collection(db, "cart");
-        const q = query(cartCollection, where("userEmail", "==", order.email));
-        onSnapshot(q, (snapshot) => {
-          const cartData = snapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          order.cart = cartData; // Attach cart data to the corresponding order
-          setOrders((prevOrders) =>
-            prevOrders.map((o) => (o.id === order.id ? order : o))
-          );
-          setFilteredOrders((prevOrders) =>
-            prevOrders.map((o) => (o.id === order.id ? order : o))
-          );
-        });
-      });
-    };
-    if (orders.length > 0) {
-      fetchCartData();
-    }
-  }, [orders]);
+  // useEffect(() => {
+  //   const fetchCartData = () => {
+  //     orders.forEach((order) => {
+  //       const cartCollection = collection(db, "cart");
+  //       const q = query(cartCollection, where("userEmail", "==", order.email));
+  //       onSnapshot(q, (snapshot) => {
+  //         const cartData = snapshot.docs.map((doc) => ({
+  //           ...doc.data(),
+  //           id: doc.id,
+  //         }));
+  //         order.cart = cartData; // Attach cart data to the corresponding order
+  //         setOrders((prevOrders) =>
+  //           prevOrders.map((o) => (o.id === order.id ? order : o))
+  //         );
+  //         setFilteredOrders((prevOrders) =>
+  //           prevOrders.map((o) => (o.id === order.id ? order : o))
+  //         );
+  //       });
+  //     });
+  //   };
+  //   if (orders.length > 0) {
+  //     fetchCartData();
+  //   }
+  // }, [orders]);
 
-  useEffect(() => {
-    setFilteredOrders(
-      orders.filter(
-        (order) =>
-          order.orderNo
-            .toString()
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          order.mpesaCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          order.mpesaNumber.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  }, [searchQuery, orders]);
+  // useEffect(() => {
+  //   setFilteredOrders(
+  //     orders.filter(
+  //       (order) =>
+  //         order.orderNo
+  //           .toString()
+  //           .toLowerCase()
+  //           .includes(searchQuery.toLowerCase()) ||
+  //         order.mpesaCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //         order.mpesaNumber.toLowerCase().includes(searchQuery.toLowerCase())
+  //     )
+  //   );
+  // }, [searchQuery, orders]);
 
   return (
     <>
